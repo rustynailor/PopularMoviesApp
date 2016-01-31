@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -34,14 +35,13 @@ import java.util.List;
  */
 public class MainDiscoveryFragment extends Fragment {
 
-    //an array to hold movie items
-    //TODO: update this to hold images as a custom Array Adapter
-    public ArrayAdapter<String> mMovieAdapter;
+    //our custom adapter
+    private MovieGridviewAdapter adapter;
 
     public MainDiscoveryFragment() {
     }
 
-    private class FetchMoviesTask extends AsyncTask<Void, Void, String[]> {
+    private class FetchMoviesTask extends AsyncTask<Void, Void, Movie[]> {
 
         private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
 
@@ -49,7 +49,7 @@ public class MainDiscoveryFragment extends Fragment {
          * Take the String representing the complete forecast in JSON Format and
          * pull out the data we need for our movie app.
          */
-        private String[] getMovieDataFromJson(String movieJsonStr)
+        private Movie[] getMovieDataFromJson(String movieJsonStr)
                 throws JSONException {
 
             // These are the names of the JSON objects we need
@@ -63,38 +63,33 @@ public class MainDiscoveryFragment extends Fragment {
             JSONObject movieJson = new JSONObject(movieJsonStr);
             JSONArray movieArray = movieJson.getJSONArray(MOVIE_LIST);
 
-            String[] resultStrs = new String[movieArray.length()];
+            Movie[] result = new Movie[movieArray.length()];
             for(int i = 0; i < movieArray.length(); i++) {
 
-                //These fields will be concatenated into a temporary return string
-                String title;
-                String posterPath;
-                String releaseDate;
-                String voteAverage;
-                String movieDescription;
-
                 // Get the JSON object representing the movie
-                JSONObject movie = movieArray.getJSONObject(i);
+                JSONObject movieData = movieArray.getJSONObject(i);
 
-                //extract neccessary fields
-                title = movie.getString(MOVIE_TITLE);
-                posterPath = movie.getString(MOVIE_IMAGE_PATH);
-                releaseDate = movie.getString(MOVIE_RELEASE_DATE);
-                voteAverage = movie.getString(MOVIE_RATING);
-                movieDescription = movie.getString(MOVIE_DESCRIPTION);
+                Movie movie = new Movie();
 
-                resultStrs[i] = title + " " + posterPath + " " + releaseDate + " " + voteAverage + " " + movieDescription;
+                //extract necessary fields
+                movie.setTitle(movieData.getString(MOVIE_TITLE));
+                movie.setPosterPath(movieData.getString(MOVIE_IMAGE_PATH));
+                movie.setReleaseDate(movieData.getString(MOVIE_RELEASE_DATE));
+                movie.setVoteAverage(movieData.getString(MOVIE_RATING));
+                movie.setMovieDescription(movieData.getString(MOVIE_DESCRIPTION));
+
+                result[i] = movie;
             }
 
 
 
-            return resultStrs;
+            return result;
 
         }
 
 
         @Override
-        protected String[] doInBackground(Void...params){
+        protected Movie[] doInBackground(Void...params){
 
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
@@ -109,14 +104,10 @@ public class MainDiscoveryFragment extends Fragment {
                 // Construct the URL for the TheMovieDb query
                 Uri.Builder builder = new Uri.Builder();
 
-
-                //https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=a797949877dc172dd0682df3ec77aa21
-
                 final String MOVIE_API_AUTHORITY = "api.themoviedb.org";
                 final String MOVIE_API_PATH_1 = "3";
                 final String MOVIE_API_PATH_2 = "discover";
                 final String MOVIE_API_PATH_3 = "movie";
-                final String MOVIE_API_KEY = BuildConfig.MY_MOVIES_SAVED_API_KEY;
 
                 //get sort order from shared preferences
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -129,7 +120,7 @@ public class MainDiscoveryFragment extends Fragment {
                         .appendPath(MOVIE_API_PATH_2)
                         .appendPath(MOVIE_API_PATH_3)
                         .appendQueryParameter("sort_by", movie_sort_order)
-                        .appendQueryParameter("api_key", MOVIE_API_KEY);
+                        .appendQueryParameter("api_key", BuildConfig.MY_MOVIES_SAVED_API_KEY);
 
                 URL url = new URL(builder.build().toString());
 
@@ -182,7 +173,7 @@ public class MainDiscoveryFragment extends Fragment {
 
             //now convert JsonString to something usable
             try {
-                String[] returnArray = getMovieDataFromJson(movieJsonStr);
+                Movie[] returnArray = getMovieDataFromJson(movieJsonStr);
                 return returnArray;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -194,11 +185,12 @@ public class MainDiscoveryFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(String[] movieData) {
+        protected void onPostExecute(Movie[] movieData) {
             super.onPostExecute(movieData);
-            mMovieAdapter.clear(); // clear existing data
-            for(String movie : movieData){
-                mMovieAdapter.add(movie);
+            adapter.clear(); // clear existing data
+            for(Movie movie : movieData){
+                adapter.add(movie);
+                adapter.notifyDataSetChanged();
             }
 
         }
@@ -221,25 +213,11 @@ public class MainDiscoveryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        new FetchMoviesTask().execute();
 
+        adapter = new MovieGridviewAdapter(getActivity());
         View rootView =  inflater.inflate(R.layout.fragment_main_discovery, container, false);
-
-        //temporary string array for updates
-        String[] placeholder = {
-                "Movies Loading..."
-        };
-
-        List<String> placeholderArrayList = new ArrayList<String>(Arrays.asList(placeholder));
-
-
-        mMovieAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.list_item_movie, R.id.list_item_movie_textview, placeholderArrayList);
-
-        ListView movieList = (ListView)rootView.findViewById(R.id.listViewMovies);
-
-        movieList.setAdapter(mMovieAdapter);
-
+        GridView gridview = (GridView) rootView.findViewById(R.id.gridview_movies);
+        gridview.setAdapter(adapter);
         return rootView;
     }
 
