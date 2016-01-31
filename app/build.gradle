@@ -16,6 +16,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug{
+            buildConfigField("String", "MY_MOVIES_SAVED_API_KEY", "\"" + MY_MOVIES_API_KEY +"\"")
+            minifyEnabled false
+            applicationIdSuffix ".debug"
+        }
+
     }
 }
 
