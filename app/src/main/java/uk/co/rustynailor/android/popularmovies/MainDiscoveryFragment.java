@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,6 +25,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This fragment contains the main list of movie items
@@ -40,6 +44,54 @@ public class MainDiscoveryFragment extends Fragment {
     private class FetchMoviesTask extends AsyncTask<Void, Void, String[]> {
 
         private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
+
+        /**
+         * Take the String representing the complete forecast in JSON Format and
+         * pull out the data we need for our movie app.
+         */
+        private String[] getMovieDataFromJson(String movieJsonStr)
+                throws JSONException {
+
+            // These are the names of the JSON objects we need
+            final String MOVIE_LIST = "results";
+            final String MOVIE_TITLE = "original_title";
+            final String MOVIE_IMAGE_PATH = "poster_path";
+            final String MOVIE_RELEASE_DATE = "release_date";
+            final String MOVIE_RATING = "vote_average";
+            final String MOVIE_DESCRIPTION = "overview";
+
+            JSONObject movieJson = new JSONObject(movieJsonStr);
+            JSONArray movieArray = movieJson.getJSONArray(MOVIE_LIST);
+
+            String[] resultStrs = new String[movieArray.length()];
+            for(int i = 0; i < movieArray.length(); i++) {
+
+                //These fields will be concatenated into a temporary return string
+                String title;
+                String posterPath;
+                String releaseDate;
+                String voteAverage;
+                String movieDescription;
+
+                // Get the JSON object representing the movie
+                JSONObject movie = movieArray.getJSONObject(i);
+
+                //extract neccessary fields
+                title = movie.getString(MOVIE_TITLE);
+                posterPath = movie.getString(MOVIE_IMAGE_PATH);
+                releaseDate = movie.getString(MOVIE_RELEASE_DATE);
+                voteAverage = movie.getString(MOVIE_RATING);
+                movieDescription = movie.getString(MOVIE_DESCRIPTION);
+
+                resultStrs[i] = title + " " + posterPath + " " + releaseDate + " " + voteAverage + " " + movieDescription;
+            }
+
+
+
+            return resultStrs;
+
+        }
+
 
         @Override
         protected String[] doInBackground(Void...params){
@@ -112,7 +164,7 @@ public class MainDiscoveryFragment extends Fragment {
 
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
-                // If we didn't successfully get the movie data, there's no point in attemping
+                // If we didn't successfully get the movie data, there's no point in attempting
                 // to parse it.
                 return null;
             } finally{
@@ -128,25 +180,72 @@ public class MainDiscoveryFragment extends Fragment {
                 }
             }
 
+            //now convert JsonString to something usable
+            try {
+                String[] returnArray = getMovieDataFromJson(movieJsonStr);
+                return returnArray;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
 
             return null;
         }
 
         @Override
-        protected void onPostExecute(String[] forecastData) {
-            super.onPostExecute(forecastData);
-            //mMovieAdapter.clear(); // clear existing data
+        protected void onPostExecute(String[] movieData) {
+            super.onPostExecute(movieData);
+            mMovieAdapter.clear(); // clear existing data
+            for(String movie : movieData){
+                mMovieAdapter.add(movie);
+            }
 
         }
     }
 
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateMovies();
+    }
+
+    //we ovverrode
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateMovies();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         new FetchMoviesTask().execute();
 
-        return inflater.inflate(R.layout.fragment_main_discovery, container, false);
+        View rootView =  inflater.inflate(R.layout.fragment_main_discovery, container, false);
+
+        //temporary string array for updates
+        String[] placeholder = {
+                "Movies Loading..."
+        };
+
+        List<String> placeholderArrayList = new ArrayList<String>(Arrays.asList(placeholder));
+
+
+        mMovieAdapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.list_item_movie, R.id.list_item_movie_textview, placeholderArrayList);
+
+        ListView movieList = (ListView)rootView.findViewById(R.id.listViewMovies);
+
+        movieList.setAdapter(mMovieAdapter);
+
+        return rootView;
     }
+
+    private void updateMovies() {
+        //get shared preference
+        new FetchMoviesTask().execute();
+    }
+
 }
