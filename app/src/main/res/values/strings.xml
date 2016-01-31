@@ -11,7 +11,7 @@
     <!-- Movie sort order -->
     <string name="pref_title_movie_sort_order">Sort films by</string>
     <string name="pref_movie_sort_order_key">movie_sort_order_key</string>
-    <string name="pref_movie_sort_order_default_value">popularity_desc</string>
+    <string name="pref_movie_sort_order_default_value">popularity.desc</string>
     <string-array name="pref_movie_sort_order">
         <item>Rating (highest first)</item>
         <item>Rating (lowest first)</item>
@@ -19,9 +19,9 @@
         <item>Least Popular</item>
     </string-array>
     <string-array name="pref_movie_sort_order_values">
-        <item>rating_desc</item>
-        <item>rating_asc</item>
-        <item>popularity_desc</item>
-        <item>popularity_asc</item>
+        <item>rating.desc</item>
+        <item>rating.asc</item>
+        <item>popularity.desc</item>
+        <item>popularity.asc</item>
     </string-array>
 </resources>

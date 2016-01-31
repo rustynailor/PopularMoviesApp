@@ -9,9 +9,11 @@
     tools:context="uk.co.rustynailor.android.popularmovies.MainDiscoveryFragment"
     tools:showIn="@layout/activity_main_discovery">
 
-    <TextView
+
+    <GridView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
-
+        android:id="@+id/gridView"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
