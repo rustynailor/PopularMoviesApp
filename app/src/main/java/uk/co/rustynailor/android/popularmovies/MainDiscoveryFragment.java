@@ -106,23 +106,23 @@ public class MainDiscoveryFragment extends Fragment {
 
                 final String MOVIE_API_AUTHORITY = "api.themoviedb.org";
                 final String MOVIE_API_PATH_1 = "3";
-                final String MOVIE_API_PATH_2 = "discover";
-                final String MOVIE_API_PATH_3 = "movie";
+                final String MOVIE_API_PATH_2 = "movie";
 
                 //get sort order from shared preferences
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                String movie_sort_order = prefs.getString(getString(R.string.sort_pref_key), getString(R.string.sort_pref_default_value));
+                String movie_sort_order = prefs.getString(getString(R.string.pref_movie_sort_order_key), getString(R.string.pref_movie_sort_order_default_value));
 
 
                 builder.scheme("https")
                         .authority(MOVIE_API_AUTHORITY)
                         .appendPath(MOVIE_API_PATH_1)
                         .appendPath(MOVIE_API_PATH_2)
-                        .appendPath(MOVIE_API_PATH_3)
-                        .appendQueryParameter("sort_by", movie_sort_order)
+                        .appendPath(movie_sort_order)
                         .appendQueryParameter("api_key", BuildConfig.MY_MOVIES_SAVED_API_KEY);
 
                 URL url = new URL(builder.build().toString());
+
+                Log.d(LOG_TAG, "Fetched data from: " + url);
 
                // Create the request to TheMovieDb, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();

@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name">PopularMovies</string>
     <string name="action_settings">Settings</string>
-    <string name="sort_pref_default_value">Highest Value</string>
-    <string name="sort_pref_key">movie_sort_order</string>
-    <string name="sort_pref_label">Movie Sort Order</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
@@ -11,17 +8,13 @@
     <!-- Movie sort order -->
     <string name="pref_title_movie_sort_order">Sort films by</string>
     <string name="pref_movie_sort_order_key">movie_sort_order_key</string>
-    <string name="pref_movie_sort_order_default_value">popularity.desc</string>
+    <string name="pref_movie_sort_order_default_value">popular</string>
     <string-array name="pref_movie_sort_order">
-        <item>Rating (highest first)</item>
-        <item>Rating (lowest first)</item>
+        <item>Highest Rated</item>
         <item>Most Popular</item>
-        <item>Least Popular</item>
     </string-array>
     <string-array name="pref_movie_sort_order_values">
-        <item>rating.desc</item>
-        <item>rating.asc</item>
-        <item>popularity.desc</item>
-        <item>popularity.asc</item>
+        <item>top_rated</item>
+        <item>popular</item>
     </string-array>
 </resources>

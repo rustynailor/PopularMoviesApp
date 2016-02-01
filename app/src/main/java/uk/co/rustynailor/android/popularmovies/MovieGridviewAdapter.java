@@ -55,7 +55,7 @@ public class MovieGridviewAdapter extends BaseAdapter {
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(185, 370));
+            imageView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(0, 0, 0, 0);
         } else {
@@ -84,7 +84,25 @@ public class MovieGridviewAdapter extends BaseAdapter {
         String url = builder.build().toString();
         Log.d("MOVIE GRID VIEW", url);
 
-        Picasso.with(mContext).load(url).into(imageView);
+        //get display width to resize images accurately
+        //Todo: numColumns needs to reflect number of columns in layout
+        // revisit in design rework
+        int width= mContext.getResources()
+                .getDisplayMetrics()
+                .widthPixels;
+
+        int numColumns = 3;
+
+        //cinema poster ratio, as found here
+        //http://www.imdb.com/help/show_leaf?photosspecs
+        double posterRatio = 1.48;
+
+
+        Picasso.with(mContext)
+                .load(url)
+                .centerCrop()
+                .resize(width / numColumns, (int) Math.round((width/numColumns)*posterRatio))
+                .into(imageView);
         return imageView;
     }
 
