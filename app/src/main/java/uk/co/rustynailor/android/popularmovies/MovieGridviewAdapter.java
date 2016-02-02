@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 /**
  * Created by russellhicks on 31/01/16.
  */
-public class MovieGridviewAdapter extends BaseAdapter {
+public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdapter.ViewHolder> {
     private Context mContext;
     private ArrayList<Movie> mMovies;
 
@@ -29,16 +30,27 @@ public class MovieGridviewAdapter extends BaseAdapter {
         mMovies = new ArrayList<Movie>();
     }
 
-    public int getCount() {
-        return mMovies.size();
-    }
 
-    public Movie getItem(int position) {
-        return mMovies.get(position);
+
+    // Provide a reference to the views for each data item
+    // Complex data items may need more than one view per item, and
+    // you provide access to all the views for a data item in a view holder
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        // each data item is just a string in this case
+        public ImageView mImageView;
+        public ViewHolder(ImageView v) {
+            super(v);
+            mImageView = v;
+        }
     }
 
     public long getItemId(int position) {
         return 0;
+    }
+
+    @Override
+    public int getItemCount() {
+        return mMovies.size();
     }
 
     public void add(Movie movie){
@@ -49,18 +61,26 @@ public class MovieGridviewAdapter extends BaseAdapter {
         mMovies.clear();
     }
 
-    // create a new ImageView for each item referenced by the Adapter
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
-        if (convertView == null) {
-            // if it's not recycled, initialize some attributes
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(0, 0, 0, 0);
-        } else {
-            imageView = (ImageView) convertView;
-        }
+    // Create new views (invoked by the layout manager)
+    @Override
+    public MovieGridviewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+
+        ImageView imageView = new ImageView(mContext);
+        imageView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setPadding(0, 0, 0, 0);
+
+        ViewHolder vh = new ViewHolder(imageView);
+        return vh;
+    }
+
+
+    // Replace the contents of a view (invoked by the layout manager)
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        // - get element from your dataset at this position
+        // - replace the contents of the view with that element
 
         //Build URL to download image
         Uri.Builder builder = new Uri.Builder();
@@ -102,9 +122,15 @@ public class MovieGridviewAdapter extends BaseAdapter {
                 .load(url)
                 .centerCrop()
                 .resize(width / numColumns, (int) Math.round((width/numColumns)*posterRatio))
-                .into(imageView);
-        return imageView;
+                .into(holder.mImageView);
     }
+
+
+
+
+
+
+
 
 
 
