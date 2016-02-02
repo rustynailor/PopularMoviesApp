@@ -6,14 +6,12 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.text.format.Time;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,10 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 
 /**
  * This fragment contains the main list of movie items
@@ -37,6 +32,12 @@ public class MainDiscoveryFragment extends Fragment {
 
     //our custom adapter
     private MovieGridviewAdapter adapter;
+    //Gridview for poster layout
+    private RecyclerView mRecyclerview;
+    //page count for polling API with, updated in onScrollListener
+    private int mPageCount = 1;
+    //layout manager for recycler view
+    private GridLayoutManager mLayoutManager;
 
     public MainDiscoveryFragment() {
     }
@@ -118,7 +119,8 @@ public class MainDiscoveryFragment extends Fragment {
                         .appendPath(MOVIE_API_PATH_1)
                         .appendPath(MOVIE_API_PATH_2)
                         .appendPath(movie_sort_order)
-                        .appendQueryParameter("api_key", BuildConfig.MY_MOVIES_SAVED_API_KEY);
+                        .appendQueryParameter("api_key", BuildConfig.MY_MOVIES_SAVED_API_KEY)
+                        .appendQueryParameter("page", Integer.toString(mPageCount));
 
                 URL url = new URL(builder.build().toString());
 
@@ -216,10 +218,27 @@ public class MainDiscoveryFragment extends Fragment {
 
         adapter = new MovieGridviewAdapter(getActivity());
         View rootView =  inflater.inflate(R.layout.fragment_main_discovery, container, false);
-        GridView gridview = (GridView) rootView.findViewById(R.id.gridview_movies);
-        gridview.setAdapter(adapter);
+        mRecyclerview = (RecyclerView) rootView.findViewById(R.id.recyclerview_movies);
+        // use a linear layout manager
+        mLayoutManager = new GridLayoutManager(getActivity(), 3,GridLayoutManager.VERTICAL, false);
+        mRecyclerview.setLayoutManager(mLayoutManager);
+
+        mRecyclerview.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                // do something...
+                mPageCount++;
+                updateMovies();
+            }
+        });
+
+        mRecyclerview.setAdapter(adapter);
         return rootView;
     }
+
+
+
+
 
     private void updateMovies() {
         //get shared preference
