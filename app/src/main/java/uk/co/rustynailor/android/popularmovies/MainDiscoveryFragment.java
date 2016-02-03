@@ -189,7 +189,7 @@ public class MainDiscoveryFragment extends Fragment {
         @Override
         protected void onPostExecute(Movie[] movieData) {
             super.onPostExecute(movieData);
-            adapter.clear(); // clear existing data
+            //adapter.clear(); // clear existing data
             for(Movie movie : movieData){
                 adapter.add(movie);
                 adapter.notifyDataSetChanged();

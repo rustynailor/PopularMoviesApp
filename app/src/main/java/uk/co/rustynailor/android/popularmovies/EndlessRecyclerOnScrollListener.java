@@ -2,6 +2,7 @@ package uk.co.rustynailor.android.popularmovies;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 /**
  *  Created by russellhicks on 02/02/16.
@@ -15,9 +16,9 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
     public static String TAG = EndlessRecyclerOnScrollListener.class.getSimpleName();
 
-    private int previousTotal = 0; // The total number of items in the dataset after the last load
+    private int previousTotal = 12; // The total number of items in the dataset after the last load
     private boolean loading = true; // True if we are still waiting for the last set of data to load.
-    private int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position before loading more.
+    private int visibleThreshold = 3; // The minimum amount of items to have below your current scroll position before loading more.
     int firstVisibleItem, visibleItemCount, totalItemCount;
 
     private int current_page = 1;
@@ -53,6 +54,8 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
             loading = true;
         }
+
+        Log.d(TAG, "Visible: " + visibleItemCount + " | total : " + totalItemCount + " | first: " + firstVisibleItem + " | Curr pg: " + current_page);
     }
 
     public abstract void onLoadMore(int current_page);
