@@ -189,6 +189,7 @@ public class MainDiscoveryFragment extends Fragment {
         @Override
         protected void onPostExecute(Movie[] movieData) {
             super.onPostExecute(movieData);
+            //Todo: move clear to a new method called only on sort order change
             //adapter.clear(); // clear existing data
             for(Movie movie : movieData){
                 adapter.add(movie);

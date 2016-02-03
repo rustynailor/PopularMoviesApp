@@ -17,4 +17,5 @@
         <item>top_rated</item>
         <item>popular</item>
     </string-array>
+    <string name="title_activity_movie_detail">MovieDetail</string>
 </resources>
