@@ -28,6 +28,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="uk.co.rustynailor.android.popularmovies.MainDiscovery" />
         </activity>
+        <activity
+            android:name=".MovieDetail"
+            android:label="@string/title_activity_movie_detail"
+            android:parentActivityName=".MainDiscovery"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="uk.co.rustynailor.android.popularmovies.MainDiscovery" />
+        </activity>
     </application>
 
 </manifest>
