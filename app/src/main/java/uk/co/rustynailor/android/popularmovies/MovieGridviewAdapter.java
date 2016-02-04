@@ -1,6 +1,7 @@
 package uk.co.rustynailor.android.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -24,10 +25,13 @@ import java.util.ArrayList;
 public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdapter.ViewHolder> {
     private Context mContext;
     private ArrayList<Movie> mMovies;
+    private MovieItemClickListener mListener;
 
-    public MovieGridviewAdapter(Context c) {
+
+    public MovieGridviewAdapter(Context c, MovieItemClickListener listener) {
         mContext = c;
         mMovies = new ArrayList<Movie>();
+        mListener = listener;
     }
 
 
@@ -35,7 +39,7 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public ImageView mImageView;
         public ViewHolder(ImageView v) {
@@ -71,7 +75,16 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setPadding(0, 0, 0, 0);
 
-        ViewHolder vh = new ViewHolder(imageView);
+        final ViewHolder vh = new ViewHolder(imageView);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onItemClick(v, vh.getPosition());
+            }
+        });
+
+
         return vh;
     }
 
@@ -123,6 +136,8 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
                 .centerCrop()
                 .resize(width / numColumns, (int) Math.round((width/numColumns)*posterRatio))
                 .into(holder.mImageView);
+
+
     }
 
 

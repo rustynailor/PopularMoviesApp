@@ -1,5 +1,6 @@
 package uk.co.rustynailor.android.popularmovies;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -99,6 +100,7 @@ public class MainDiscoveryFragment extends Fragment {
 
             // Will contain the raw JSON response as a string.
             String movieJsonStr = null;
+            //ToDo: get rid of magic number
             final int numMovies = 7;
 
             try {
@@ -217,7 +219,14 @@ public class MainDiscoveryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        adapter = new MovieGridviewAdapter(getActivity());
+        adapter = new MovieGridviewAdapter(getActivity(), new MovieItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Log.d("GRID CLICK", "Click registered: " + position);
+                Intent i = new Intent(getActivity(), MovieDetail.class);
+                getActivity().startActivity(i);
+            }
+        });
         View rootView =  inflater.inflate(R.layout.fragment_main_discovery, container, false);
         mRecyclerview = (RecyclerView) rootView.findViewById(R.id.recyclerview_movies);
         // use a linear layout manager
