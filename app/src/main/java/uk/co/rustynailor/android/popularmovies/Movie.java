@@ -14,6 +14,7 @@ public class Movie implements Parcelable{
     private String mReleaseDate;
     private String mVoteAverage;
     private String mMovieDescription;
+    private String mLength;
 
     //constructors added for parcelable
     public Movie(){
@@ -41,32 +42,41 @@ public class Movie implements Parcelable{
                 }
             };
 
-    public void setTitle(String mTitle) {
-        this.mTitle = mTitle;
+    public void setTitle(String title) {
+        mTitle = title;
     }
 
     public String getPosterPath() {
         return mPosterPath;
     }
 
-    public void setPosterPath(String mPosterPath) {
-        this.mPosterPath = mPosterPath;
+    public void setPosterPath(String posterPath) {
+        mPosterPath = posterPath;
     }
 
     public String getReleaseDate() {
         return mReleaseDate;
     }
 
-    public void setReleaseDate(String mReleaseDate) {
-        this.mReleaseDate = mReleaseDate;
+    public void setReleaseDate(String releaseDate) {
+        mReleaseDate = releaseDate;
     }
 
     public String getVoteAverage() {
         return mVoteAverage;
     }
 
-    public void setVoteAverage(String mVoteAverage) {
-        this.mVoteAverage = mVoteAverage;
+    public void setVoteAverage(String voteAverage) {
+        mVoteAverage = voteAverage;
+    }
+
+
+    public String getLength() {
+        return mLength;
+    }
+
+    public void setLength(String length) {
+        mLength = length;
     }
 
     public String getMovieDescription() {
@@ -89,6 +99,7 @@ public class Movie implements Parcelable{
         dest.writeString(mReleaseDate);
         dest.writeString(mVoteAverage);
         dest.writeString(mMovieDescription);
+        dest.writeString(mLength);
     }
 
     public void readFromParcel(Parcel source){
@@ -97,5 +108,6 @@ public class Movie implements Parcelable{
         mReleaseDate = source.readString();
         mVoteAverage = source.readString();
         mMovieDescription = source.readString();
+        mLength = source.readString();
     }
 }
