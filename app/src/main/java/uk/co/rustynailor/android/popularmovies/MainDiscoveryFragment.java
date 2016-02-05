@@ -101,7 +101,7 @@ public class MainDiscoveryFragment extends Fragment {
             // Will contain the raw JSON response as a string.
             String movieJsonStr = null;
             //ToDo: get rid of magic number
-            final int numMovies = 7;
+            final int numMovies = 20;
 
             try {
                 // Construct the URL for the TheMovieDb query
@@ -201,18 +201,10 @@ public class MainDiscoveryFragment extends Fragment {
         }
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
-        updateMovies();
-    }
-
-    //we ovverrode
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateMovies();
+        new FetchMoviesTask().execute();
     }
 
     @Override
@@ -222,7 +214,6 @@ public class MainDiscoveryFragment extends Fragment {
         adapter = new MovieGridviewAdapter(getActivity(), new MovieItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Log.d("GRID CLICK", "Click registered: " + position);
                 Intent i = new Intent(getActivity(), MovieDetail.class);
                 getActivity().startActivity(i);
             }
@@ -237,12 +228,13 @@ public class MainDiscoveryFragment extends Fragment {
             @Override
             public void onLoadMore(int current_page) {
                 // do something...
-                mPageCount++;
+                mPageCount = current_page;
                 updateMovies();
             }
         });
 
         mRecyclerview.setAdapter(adapter);
+
         return rootView;
     }
 
@@ -251,7 +243,6 @@ public class MainDiscoveryFragment extends Fragment {
 
 
     private void updateMovies() {
-        //get shared preference
         new FetchMoviesTask().execute();
     }
 
