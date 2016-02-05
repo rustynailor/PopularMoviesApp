@@ -65,6 +65,11 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
         mMovies.clear();
     }
 
+    public Movie getItem(int position){
+        return mMovies.get(position);
+    }
+
+
     // Create new views (invoked by the layout manager)
     @Override
     public MovieGridviewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

@@ -215,6 +215,10 @@ public class MainDiscoveryFragment extends Fragment {
             @Override
             public void onItemClick(View v, int position) {
                 Intent i = new Intent(getActivity(), MovieDetail.class);
+
+                Bundle b = new Bundle();
+                b.putParcelable(getActivity().getString(R.string.parceled_movie_identifier), adapter.getItem(position));
+                i.putExtras(b);
                 getActivity().startActivity(i);
             }
         });

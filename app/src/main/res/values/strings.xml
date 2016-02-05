@@ -18,4 +18,5 @@
         <item>popular</item>
     </string-array>
     <string name="title_activity_movie_detail">MovieDetail</string>
+    <string name="parceled_movie_identifier">selectedMovie</string>
 </resources>
