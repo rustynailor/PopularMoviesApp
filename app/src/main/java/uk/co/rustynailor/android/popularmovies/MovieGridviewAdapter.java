@@ -96,9 +96,12 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+
+        //clear existing data
+        holder.mImageView.setVisibility(View.INVISIBLE);
 
         //Build URL to download image
         Uri.Builder builder = new Uri.Builder();
@@ -122,7 +125,6 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
         String url = builder.build().toString();
 
         //get display width to resize images accurately
-        //Todo: numColumns needs to reflect number of columns in layout
         // revisit in design rework
         int width= mContext.getResources()
                 .getDisplayMetrics()
@@ -139,7 +141,17 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
                 .load(url)
                 .centerCrop()
                 .resize(width / numColumns, (int) Math.round((width/numColumns)*posterRatio))
-                .into(holder.mImageView);
+                .into(holder.mImageView, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        holder.mImageView.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
 
 
     }

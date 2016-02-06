@@ -39,10 +39,14 @@ public class MainDiscoveryFragment extends Fragment {
     private int mPageCount = 1;
     //layout manager for recycler view
     private GridLayoutManager mLayoutManager;
+    //endless scroll manager
+    private EndlessRecyclerOnScrollListener mEndlessRecyclerOnScrollListener;
     //number of columns in gridlayout - placed in member var for later
     // manipulation into a tablet layout
     //it is public to allow access from the adapter
     public static int mNumColumns = 2;
+    //number of movies returned per page from api
+    public static int mMoviesPerRequest = 20;
 
 
     public MainDiscoveryFragment() {
@@ -105,8 +109,6 @@ public class MainDiscoveryFragment extends Fragment {
 
             // Will contain the raw JSON response as a string.
             String movieJsonStr = null;
-            //ToDo: get rid of magic number
-            final int numMovies = 20;
 
             try {
                 // Construct the URL for the TheMovieDb query
@@ -130,6 +132,8 @@ public class MainDiscoveryFragment extends Fragment {
                         .appendQueryParameter("page", Integer.toString(mPageCount));
 
                 URL url = new URL(builder.build().toString());
+
+                Log.d("URL", url.toString());
 
                // Create the request to TheMovieDb, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -228,14 +232,16 @@ public class MainDiscoveryFragment extends Fragment {
         mLayoutManager = new GridLayoutManager(getActivity(), mNumColumns,GridLayoutManager.VERTICAL, false);
         mRecyclerview.setLayoutManager(mLayoutManager);
 
-        mRecyclerview.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
+        mEndlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(mLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
                 // load next page of movies
                 mPageCount = current_page;
                 updateMovies();
             }
-        });
+        };
+
+        mRecyclerview.setOnScrollListener(mEndlessRecyclerOnScrollListener);
 
         mRecyclerview.setAdapter(adapter);
 
@@ -247,6 +253,10 @@ public class MainDiscoveryFragment extends Fragment {
     //reset adapter and reset page counter to 1
     public void clearList() {
         adapter.clear();
+        adapter.notifyDataSetChanged();
+        mEndlessRecyclerOnScrollListener.setTotal(mMoviesPerRequest);
+        mEndlessRecyclerOnScrollListener.setLoadingState(false);
+        mEndlessRecyclerOnScrollListener.setPageCount(1);
         mPageCount = 1;
     }
 
