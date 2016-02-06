@@ -44,13 +44,10 @@ public class MovieDetailFragment extends Fragment {
         mMovieTitle.setText(mMovie.getTitle());
 
         mYearOfRelease = (TextView) view.findViewById(R.id.yearOfRelease);
-        mYearOfRelease.setText(mMovie.getReleaseDate());
-
-        mLength = (TextView) view.findViewById(R.id.length);
-        mLength.setText(mMovie.getLength());
+        mYearOfRelease.setText(mMovie.getYearOfRelease());
 
         mRating = (TextView) view.findViewById(R.id.rating);
-        mRating.setText(mMovie.getVoteAverage());
+        mRating.setText(mMovie.getFormattedVoteAverage());
 
         mSynopsis = (TextView) view.findViewById(R.id.synopsis);
         mSynopsis.setText(mMovie.getMovieDescription());
