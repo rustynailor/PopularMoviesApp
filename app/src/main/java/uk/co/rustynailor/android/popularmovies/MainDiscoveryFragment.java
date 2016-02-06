@@ -244,9 +244,12 @@ public class MainDiscoveryFragment extends Fragment {
 
 
 
+    public void clearList() {
+        adapter.clear();
+        mPageCount = 1;
+    }
 
-
-    private void updateMovies() {
+    public void updateMovies() {
         new FetchMoviesTask().execute();
     }
 
