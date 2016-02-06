@@ -24,4 +24,5 @@
     </string-array>
     <string name="title_activity_movie_detail">MovieDetail</string>
     <string name="parceled_movie_identifier">selectedMovie</string>
+    <string name="connection_error_message">Unable to retrieve data from the Movie DB server - please make sure you have an internet connection and try again.</string>
 </resources>
