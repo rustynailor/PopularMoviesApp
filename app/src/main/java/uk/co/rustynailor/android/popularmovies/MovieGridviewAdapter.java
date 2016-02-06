@@ -1,22 +1,15 @@
 package uk.co.rustynailor.android.popularmovies;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -33,8 +26,6 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
         mMovies = new ArrayList<Movie>();
         mListener = listener;
     }
-
-
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -100,7 +91,7 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-        //clear existing data
+        //hide existing data
         holder.mImageView.setVisibility(View.INVISIBLE);
 
         //Build URL to download image
@@ -125,7 +116,6 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
         String url = builder.build().toString();
 
         //get display width to resize images accurately
-        // revisit in design rework
         int width= mContext.getResources()
                 .getDisplayMetrics()
                 .widthPixels;
