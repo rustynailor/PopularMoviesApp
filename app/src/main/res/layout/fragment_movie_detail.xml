@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/sample_0"
-                android:id="@+id/imageView"
+                android:id="@+id/poster"
                 android:cropToPadding="false" />
         </FrameLayout>
 
