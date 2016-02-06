@@ -16,12 +16,12 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
     public static String TAG = EndlessRecyclerOnScrollListener.class.getSimpleName();
 
-    private int previousTotal = 19; // The total number of items in the dataset after the initial load
-    private boolean loading = true; // True if we are still waiting for the last set of data to load.
-    private int visibleThreshold = 4; // The minimum amount of items to have below your current scroll position before loading more.
-    int firstVisibleItem, visibleItemCount, totalItemCount;
+    private int mPreviousTotal = 20; // The total number of items in the dataset after the initial load
+    private boolean mLoading = false; // True if we are still waiting for the last set of data to load.
+    private int mVisibleThreshold = 6; // The minimum amount of items to have below your current scroll position before loading more.
+    int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount;
 
-    private int current_page = 1;
+    private int mCurrent_page = 1;
 
     private GridLayoutManager mGridLayoutManager;
 
@@ -33,32 +33,52 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
-        visibleItemCount = recyclerView.getChildCount();
-        totalItemCount = mGridLayoutManager.getItemCount();
-        firstVisibleItem = mGridLayoutManager.findFirstVisibleItemPosition();
+        mVisibleItemCount = recyclerView.getChildCount();
+        mTotalItemCount = mGridLayoutManager.getItemCount();
+        mFirstVisibleItem = mGridLayoutManager.findFirstVisibleItemPosition();
 
-        if (loading) {
-            if (totalItemCount > previousTotal) {
-                loading = false;
-                previousTotal = totalItemCount;
+        Log.d("SCROLLING", "loading: " + mLoading + " | visibleItemCount: " + mVisibleItemCount + " | firstVisibleItem : " + mFirstVisibleItem);
+        Log.d("LOAD MORE", "loading: " + mLoading + " | totalItemCount: " + mTotalItemCount + " | previousTotal : " + mPreviousTotal);
+
+
+
+        if (mLoading) {
+            if (mTotalItemCount > mPreviousTotal) {
+                mLoading = false;
+                mPreviousTotal = mTotalItemCount;
             }
         }
 
-        if (!loading &&
-                firstVisibleItem != -1  && //don't trigger load if we are at very beginning of results set.
-                (totalItemCount - visibleItemCount)
-                <= (firstVisibleItem + visibleThreshold)) {
+        if (!mLoading &&
+                (mTotalItemCount - mVisibleItemCount)
+                <= (mFirstVisibleItem + mVisibleThreshold)) {
             // End has been reached
             // Trigger Load in calling Activity
-            current_page++;
-            Log.d("SCROLLING", "loading: " + loading + " | visibleItemCount: " + visibleItemCount + " | firstVisibleItem : " + firstVisibleItem);
-            Log.d("LOAD MORE", "loading: " + loading + " | totalItemCount: " + totalItemCount + " | previousTotal : " + previousTotal);
-            onLoadMore(current_page);
-
-
-            loading = true;
+            mCurrent_page++;
+            onLoadMore(mCurrent_page);
+            mLoading = true;
         }
     }
 
+    //when the sort preference is changed, we need to reset the total and loading state
+    //as the previous item count is no longer relevant
+    public void setTotal(int newTotal)
+    {
+        mPreviousTotal = newTotal;
+    }
+
+    //also when sort order is changed, this is used to reset the loading state to false
+    //to prevent it being stuck in a loading state with no api call
+    public void setLoadingState(boolean loadingState)
+    {
+        mLoading = loadingState;
+    }
+
+    //set page count
+    public void setPageCount(int pageCount){
+        mCurrent_page = pageCount;
+    }
+
+    //this is implemented in MainDiscoveryFragment to carry out the background update
     public abstract void onLoadMore(int current_page);
 }
