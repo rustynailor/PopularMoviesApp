@@ -39,6 +39,11 @@ public class MainDiscoveryFragment extends Fragment {
     private int mPageCount = 1;
     //layout manager for recycler view
     private GridLayoutManager mLayoutManager;
+    //number of columns in gridlayout - placed in member var for later
+    // manipulation into a tablet layout
+    //it is public to allow access from the adapter
+    public static int mNumColumns = 2;
+
 
     public MainDiscoveryFragment() {
     }
@@ -126,8 +131,6 @@ public class MainDiscoveryFragment extends Fragment {
 
                 URL url = new URL(builder.build().toString());
 
-                Log.d(LOG_TAG, "Fetched data from: " + url);
-
                // Create the request to TheMovieDb, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -191,13 +194,10 @@ public class MainDiscoveryFragment extends Fragment {
         @Override
         protected void onPostExecute(Movie[] movieData) {
             super.onPostExecute(movieData);
-            //Todo: move clear to a new method called only on sort order change
-            //adapter.clear(); // clear existing data
             for(Movie movie : movieData){
                 adapter.add(movie);
                 adapter.notifyDataSetChanged();
             }
-
         }
     }
 
@@ -225,7 +225,7 @@ public class MainDiscoveryFragment extends Fragment {
         View rootView =  inflater.inflate(R.layout.fragment_main_discovery, container, false);
         mRecyclerview = (RecyclerView) rootView.findViewById(R.id.recyclerview_movies);
         // use a linear layout manager
-        mLayoutManager = new GridLayoutManager(getActivity(), 3,GridLayoutManager.VERTICAL, false);
+        mLayoutManager = new GridLayoutManager(getActivity(), mNumColumns,GridLayoutManager.VERTICAL, false);
         mRecyclerview.setLayoutManager(mLayoutManager);
 
         mRecyclerview.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
@@ -244,6 +244,7 @@ public class MainDiscoveryFragment extends Fragment {
 
 
 
+    //reset adapter and reset page counter to 1
     public void clearList() {
         adapter.clear();
         mPageCount = 1;
