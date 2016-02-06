@@ -27,7 +27,7 @@ import java.net.URL;
 
 
 /**
- * This fragment contains the main list of movie items
+ * This fragment contains the logic for trhe main list of movie items
  */
 public class MainDiscoveryFragment extends Fragment {
 

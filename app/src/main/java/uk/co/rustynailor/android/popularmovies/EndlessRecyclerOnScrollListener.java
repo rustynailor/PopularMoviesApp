@@ -9,7 +9,7 @@ import android.util.Log;
  *  Based on code originally found here: https://gist.github.com/ssinss/e06f12ef66c51252563e
  *  Written by https://gist.github.com/ssinss
  *  Minor updates to use grid layout manager instead of linear
- *
+ *  and to offer reset methods on reload of data
  */
 
 public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
@@ -18,7 +18,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
     private int mPreviousTotal = 20; // The total number of items in the dataset after the initial load
     private boolean mLoading = false; // True if we are still waiting for the last set of data to load.
-    private int mVisibleThreshold = 6; // The minimum amount of items to have below your current scroll position before loading more.
+    private int mVisibleThreshold = 2; // The minimum amount of items to have below your current scroll position before loading more.
     int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount;
 
     private int mCurrent_page = 1;
@@ -36,11 +36,6 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
         mVisibleItemCount = recyclerView.getChildCount();
         mTotalItemCount = mGridLayoutManager.getItemCount();
         mFirstVisibleItem = mGridLayoutManager.findFirstVisibleItemPosition();
-
-        Log.d("SCROLLING", "loading: " + mLoading + " | visibleItemCount: " + mVisibleItemCount + " | firstVisibleItem : " + mFirstVisibleItem);
-        Log.d("LOAD MORE", "loading: " + mLoading + " | totalItemCount: " + mTotalItemCount + " | previousTotal : " + mPreviousTotal);
-
-
 
         if (mLoading) {
             if (mTotalItemCount > mPreviousTotal) {
