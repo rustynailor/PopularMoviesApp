@@ -47,6 +47,7 @@ public class MainDiscovery extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /** update shared preferences and initiate a list refresh when a new sort order is selected **/
     private void updateMovieSortOrder(String sortParameter) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().putString(getString(R.string.pref_movie_sort_order_key), sortParameter).commit();

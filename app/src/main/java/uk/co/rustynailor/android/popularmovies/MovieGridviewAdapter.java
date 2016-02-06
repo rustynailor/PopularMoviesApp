@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 /**
+ * Adapter to movie list recyclerview
  * Created by russellhicks on 31/01/16.
  */
 public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdapter.ViewHolder> {
@@ -145,14 +146,5 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
 
 
     }
-
-
-
-
-
-
-
-
-
 
 }

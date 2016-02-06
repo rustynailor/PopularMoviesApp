@@ -29,7 +29,8 @@ import java.net.URL;
 
 
 /**
- * This fragment contains the logic for trhe main list of movie items
+ * This fragment contains the logic for the main list of movie items
+ * the asynchronous download method is also in this file
  */
 public class MainDiscoveryFragment extends Fragment {
 
@@ -54,6 +55,7 @@ public class MainDiscoveryFragment extends Fragment {
     public MainDiscoveryFragment() {
     }
 
+    /** Get movie data from the movie db api to display in the app **/
     private class FetchMoviesTask extends AsyncTask<Void, Void, Movie[]> {
 
         private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
@@ -260,7 +262,7 @@ public class MainDiscoveryFragment extends Fragment {
 
 
 
-    //reset adapter and reset page counter to 1
+    /** reset adapter and reset page counter to 1 */
     public void clearList() {
         adapter.clear();
         adapter.notifyDataSetChanged();
@@ -270,6 +272,7 @@ public class MainDiscoveryFragment extends Fragment {
         mPageCount = 1;
     }
 
+    /** update the movie list by initiating a background load from the api **/
     public void updateMovies() {
         new FetchMoviesTask().execute();
     }

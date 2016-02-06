@@ -12,10 +12,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import uk.co.rustynailor.android.popularmovies.R;
 
 /**
- * A placeholder fragment containing a simple view.
+ * A fragment containing a singel movie view
  */
 public class MovieDetailFragment extends Fragment {
     private Movie mMovie;
@@ -92,8 +91,6 @@ public class MovieDetailFragment extends Fragment {
                 .centerCrop()
                 .resize(width / numColumns, (int) Math.round((width / numColumns) * posterRatio))
                 .into(mPoster);
-
-
 
         return view;
     }
