@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -133,7 +135,6 @@ public class MainDiscoveryFragment extends Fragment {
 
                 URL url = new URL(builder.build().toString());
 
-                Log.d("URL", url.toString());
 
                // Create the request to TheMovieDb, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -162,12 +163,20 @@ public class MainDiscoveryFragment extends Fragment {
                     return null;
                 }
                 movieJsonStr = buffer.toString();
-                Log.d(LOG_TAG, movieJsonStr);
 
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
                 // If we didn't successfully get the movie data, there's no point in attempting
                 // to parse it.
+                // alert the user with a toast
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast toast = Toast.makeText(getActivity(), getActivity().getString(R.string.connection_error_message), Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER, 0, 0);
+                        toast.show();
+                    }
+                });
+
                 return null;
             } finally{
                 if (urlConnection != null) {
@@ -184,23 +193,24 @@ public class MainDiscoveryFragment extends Fragment {
 
             //now convert JsonString to something usable
             try {
-                Movie[] returnArray = getMovieDataFromJson(movieJsonStr);
-                return returnArray;
+                if(movieJsonStr != null && !movieJsonStr.equals("")) {
+                    Movie[] returnArray = getMovieDataFromJson(movieJsonStr);
+                    return returnArray;
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
-
             return null;
         }
 
         @Override
         protected void onPostExecute(Movie[] movieData) {
             super.onPostExecute(movieData);
-            for(Movie movie : movieData){
-                adapter.add(movie);
-                adapter.notifyDataSetChanged();
+            if(movieData != null) {
+                for (Movie movie : movieData) {
+                    adapter.add(movie);
+                    adapter.notifyDataSetChanged();
+                }
             }
         }
     }
