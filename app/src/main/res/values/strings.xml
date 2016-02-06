@@ -9,13 +9,20 @@
     <string name="pref_title_movie_sort_order">Sort films by</string>
     <string name="pref_movie_sort_order_key">movie_sort_order_key</string>
     <string name="pref_movie_sort_order_default_value">popular</string>
+
+
+
     <string-array name="pref_movie_sort_order">
         <item>Highest Rated</item>
         <item>Most Popular</item>
     </string-array>
+
+    <string name="most_popular_sort_value">popular</string>
+    <string name="highest_rated_sort_value">top_rated</string>
+
     <string-array name="pref_movie_sort_order_values">
-        <item>top_rated</item>
-        <item>popular</item>
+        <item>@string/highest_rated_sort_value</item>
+        <item>@string/most_popular_sort_value</item>
     </string-array>
     <string name="title_activity_movie_detail">MovieDetail</string>
     <string name="parceled_movie_identifier">selectedMovie</string>
