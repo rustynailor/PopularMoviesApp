@@ -10,29 +10,27 @@
     tools:context="uk.co.rustynailor.android.popularmovies.MovieDetailFragment"
     tools:showIn="@layout/activity_movie_detail">
 
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.75"
-        android:text="Movie Text"
         android:id="@+id/movieTitle"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@color/accent_material_dark"
-        android:paddingTop="50dp"
-        android:paddingBottom="50dp"
-        android:paddingLeft="10dp"
-        android:textSize="20sp" />
-
-
+        android:background="@color/movieTeal"
+        android:paddingLeft="20dp"
+        android:textSize="40sp"
+        android:textColor="@color/colorAccent"
+        android:password="false"
+        android:gravity="center_vertical"
+        android:elevation="2dp"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1.5">
         <FrameLayout
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -40,9 +38,9 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/sample_0"
                 android:id="@+id/poster"
-                android:cropToPadding="false" />
+                android:cropToPadding="false"
+                android:paddingTop="10dp" />
         </FrameLayout>
 
         <LinearLayout
@@ -55,20 +53,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2015"
-                android:id="@+id/yearOfRelease" />
+                android:id="@+id/yearOfRelease"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:textSize="25sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="120min"
-                android:id="@+id/length" />
+                android:id="@+id/rating"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="8.1/10"
-                android:id="@+id/rating" />
         </LinearLayout>
 
 
@@ -76,8 +72,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="Max (Max Records) is a young boy who feels misunderstood and wants to have fun all the time. He makes an igloo out of snow, but his sister's friends gang up on him and smash it. After making a scene in front of his mother's boyfriend, Max bites his mother and runs away. He keeps running until he stumbles upon a small boat; he climbs aboard and sets sail. "
-        android:id="@+id/synopsis" />
-
+        android:layout_weight="1.5"
+        android:id="@+id/synopsis"
+        android:padding="20dp"
+        android:ellipsize="end" />
 </LinearLayout>
