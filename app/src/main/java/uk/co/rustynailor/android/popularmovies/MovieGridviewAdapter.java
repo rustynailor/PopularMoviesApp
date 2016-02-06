@@ -120,7 +120,6 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
 
 
         String url = builder.build().toString();
-        Log.d("MOVIE GRID VIEW", url);
 
         //get display width to resize images accurately
         //Todo: numColumns needs to reflect number of columns in layout
@@ -129,7 +128,7 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
                 .getDisplayMetrics()
                 .widthPixels;
 
-        int numColumns = 3;
+        int numColumns = MainDiscoveryFragment.mNumColumns;
 
         //cinema poster ratio, as found here
         //http://www.imdb.com/help/show_leaf?photosspecs

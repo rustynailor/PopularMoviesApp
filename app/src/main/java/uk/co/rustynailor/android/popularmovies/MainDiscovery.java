@@ -1,16 +1,11 @@
 package uk.co.rustynailor.android.popularmovies;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -38,26 +33,25 @@ public class MainDiscovery extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        Log.d("CLICK ON MENU", "ID:" + id);
-
-        //noinspection SimplifiableIfStatement
-         if (id == R.id.sort_highest_rated) {
+        if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+        }
+        else if (id == R.id.sort_highest_rated) {
              //update default sort order
-             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-             prefs.edit().putString(getString(R.string.pref_movie_sort_order_key), getString(R.string.highest_rated_sort_value)).commit();
-             MainDiscoveryFragment fragment = (MainDiscoveryFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
-             fragment.clearList();
-             fragment.updateMovies();
-
+             updateMovieSortOrder(getString(R.string.highest_rated_sort_value));
         } else if (id == R.id.sort_most_popular) {
-                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-                 prefs.edit().putString(getString(R.string.pref_movie_sort_order_key), getString(R.string.most_popular_sort_value)).commit();
-                 MainDiscoveryFragment fragment = (MainDiscoveryFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
-                 fragment.clearList();
-                 fragment.updateMovies();
-
-         }
+             updateMovieSortOrder(getString(R.string.most_popular_sort_value));
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateMovieSortOrder(String sortParameter) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit().putString(getString(R.string.pref_movie_sort_order_key), sortParameter).commit();
+        MainDiscoveryFragment fragment = (MainDiscoveryFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+        fragment.clearList();
+        fragment.updateMovies();
     }
 }

@@ -16,9 +16,9 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
     public static String TAG = EndlessRecyclerOnScrollListener.class.getSimpleName();
 
-    private int previousTotal = 19; // The total number of items in the dataset after the last load
+    private int previousTotal = 19; // The total number of items in the dataset after the initial load
     private boolean loading = true; // True if we are still waiting for the last set of data to load.
-    private int visibleThreshold = 3; // The minimum amount of items to have below your current scroll position before loading more.
+    private int visibleThreshold = 4; // The minimum amount of items to have below your current scroll position before loading more.
     int firstVisibleItem, visibleItemCount, totalItemCount;
 
     private int current_page = 1;
@@ -43,16 +43,18 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
                 previousTotal = totalItemCount;
             }
         }
-        Log.d(TAG, "loading: " + loading + " | totalItemCount: " + totalItemCount + " | previousTotal : " + previousTotal);
 
-        if (!loading && (totalItemCount - visibleItemCount)
+        if (!loading &&
+                firstVisibleItem != -1  && //don't trigger load if we are at very beginning of results set.
+                (totalItemCount - visibleItemCount)
                 <= (firstVisibleItem + visibleThreshold)) {
             // End has been reached
-
-            // Do something
+            // Trigger Load in calling Activity
             current_page++;
-
+            Log.d("SCROLLING", "loading: " + loading + " | visibleItemCount: " + visibleItemCount + " | firstVisibleItem : " + firstVisibleItem);
+            Log.d("LOAD MORE", "loading: " + loading + " | totalItemCount: " + totalItemCount + " | previousTotal : " + previousTotal);
             onLoadMore(current_page);
+
 
             loading = true;
         }
