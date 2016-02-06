@@ -231,7 +231,7 @@ public class MainDiscoveryFragment extends Fragment {
         mRecyclerview.setOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
-                // do something...
+                // load next page of movies
                 mPageCount = current_page;
                 updateMovies();
             }
