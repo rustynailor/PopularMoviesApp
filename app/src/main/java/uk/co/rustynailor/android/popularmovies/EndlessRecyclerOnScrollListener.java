@@ -2,7 +2,6 @@ package uk.co.rustynailor.android.popularmovies;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 /**
  *  Created by russellhicks on 02/02/16.
@@ -55,13 +54,15 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
         }
     }
 
-    //when the sort preference is changed, we need to reset the total and loading state
+    /** set method for member variable */
+    // when the sort preference is changed, we need to reset the total and loading state
     //as the previous item count is no longer relevant
     public void setTotal(int newTotal)
     {
         mPreviousTotal = newTotal;
     }
 
+    /** set method for member variable */
     //also when sort order is changed, this is used to reset the loading state to false
     //to prevent it being stuck in a loading state with no api call
     public void setLoadingState(boolean loadingState)
@@ -69,6 +70,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
         mLoading = loadingState;
     }
 
+    /** set method for member variable */
     //set page count
     public void setPageCount(int pageCount){
         mCurrent_page = pageCount;

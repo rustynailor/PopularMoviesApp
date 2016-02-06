@@ -58,6 +58,7 @@ public class Movie implements Parcelable{
         return mReleaseDate;
     }
 
+    /** return year only */
     public String getYearOfRelease() {
 
         return mReleaseDate.substring(0,4);
@@ -71,12 +72,11 @@ public class Movie implements Parcelable{
         return mVoteAverage;
     }
 
+    /** return vote with '/10' appended for display */
     public String getFormattedVoteAverage() {
 
         return mVoteAverage + "/10";
     }
-
-
 
     public void setVoteAverage(String voteAverage) {
         mVoteAverage = voteAverage;

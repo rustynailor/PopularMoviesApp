@@ -1,14 +1,13 @@
 package uk.co.rustynailor.android.popularmovies;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.view.KeyEvent;
 
 /**
+ * Settings page for custom settings
  * A {@link PreferenceActivity} that presents a set of application settings.
  * <p>
  * See <a href="http://developer.android.com/design/patterns/settings.html">
