@@ -68,8 +68,6 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
 
 
         ImageView imageView = new ImageView(mContext);
-        imageView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setPadding(0, 0, 0, 0);
 
         final ViewHolder vh = new ViewHolder(imageView);
@@ -130,8 +128,8 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
 
         Picasso.with(mContext)
                 .load(url)
+                .resize(width / numColumns, (int) Math.round((width / numColumns) * posterRatio))
                 .centerCrop()
-                .resize(width / numColumns, (int) Math.round((width/numColumns)*posterRatio))
                 .into(holder.mImageView, new com.squareup.picasso.Callback() {
                     @Override
                     public void onSuccess() {

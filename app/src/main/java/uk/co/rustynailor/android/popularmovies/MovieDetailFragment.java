@@ -88,8 +88,8 @@ public class MovieDetailFragment extends Fragment {
 
         Picasso.with(getActivity())
                 .load(url)
-                .centerCrop()
                 .resize(width / numColumns, (int) Math.round((width / numColumns) * posterRatio))
+                .centerInside()
                 .into(mPoster);
 
         return view;
