@@ -36,7 +36,14 @@ public class MovieDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
 
         //unbundle parceled movie data
-        mMovie = (Movie) getActivity().getIntent().getExtras().getParcelable(getActivity().getString(R.string.parceled_movie_identifier));
+        //either passed directly
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mMovie = (Movie) arguments.getParcelable(getActivity().getString(R.string.parceled_movie_identifier));
+        } else {
+           //started by Movie detail activity - get args from parent
+            mMovie = (Movie) getActivity().getIntent().getExtras().getParcelable(getActivity().getString(R.string.parceled_movie_identifier));
+        }
 
         //assign to TextViews
         mMovieTitle = (TextView) view.findViewById(R.id.movieTitle);

@@ -6,15 +6,19 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainDiscovery extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main_discovery);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
@@ -24,6 +28,13 @@ public class MainDiscovery extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main_discovery, menu);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //refresh movie list on Resume
+        refreshMovieList();
     }
 
     @Override
@@ -51,6 +62,10 @@ public class MainDiscovery extends AppCompatActivity {
     private void updateMovieSortOrder(String sortParameter) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().putString(getString(R.string.pref_movie_sort_order_key), sortParameter).commit();
+        refreshMovieList();
+    }
+
+    private void refreshMovieList() {
         MainDiscoveryFragment fragment = (MainDiscoveryFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
         fragment.clearList();
         fragment.updateMovies();

@@ -25,8 +25,6 @@
         android:password="false"
         android:gravity="center_vertical"
         android:elevation="2dp"
-        android:text="Chappie"
-        android:phoneNumber="false"
         android:layout_weight="0.75"
         android:minHeight="150dp" />
 
@@ -118,17 +116,49 @@
             android:id="@+id/trailerContainer">
 
             <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/trailerListItem">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/playButton"
+                android:src="@drawable/triangle"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:text="Trailer 1"
+                android:id="@+id/trailerTitle" />
+        </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimary"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"/>
+
+            <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
-                android:id="@+id/trailerListItem">
+                android:id="@+id/trailerListItem2">
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="20dp"
-                    android:id="@+id/playButton"
+                    android:id="@+id/playButton2"
                     android:src="@drawable/triangle"/>
 
                 <TextView
@@ -136,8 +166,8 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_marginLeft="20dp"
-                    android:text="Trailer 1"
-                    android:id="@+id/trailerTitle" />
+                    android:text="Trailer 2"
+                    android:id="@+id/trailerTitle2" />
             </LinearLayout>
 
             <FrameLayout
@@ -147,6 +177,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"/>
 
         </LinearLayout>
 

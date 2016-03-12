@@ -17,6 +17,6 @@
     <item
         android:id="@+id/sort_highest_rated"
         app:showAsAction="never"
-        android:title="Highrest Rated First"
+        android:title="Highest Rated First"
         app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
 </menu>
