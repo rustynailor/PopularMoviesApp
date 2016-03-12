@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#212121</color>
     <color name="colorAccent">#F5F5F5</color>
     <color name="movieTeal">#009688</color>
+    <color name="favouriteButton">#79009688</color>
 </resources>
