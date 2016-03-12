@@ -121,4 +121,5 @@ public class Movie implements Parcelable{
         mMovieDescription = source.readString();
         mLength = source.readString();
     }
+
 }

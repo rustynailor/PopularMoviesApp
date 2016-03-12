@@ -29,6 +29,12 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
         mListener = listener;
     }
 
+    public MovieGridviewAdapter(Context c, MovieItemClickListener listener, ArrayList<Movie> movies) {
+        mContext = c;
+        mMovies = movies;
+        mListener = listener;
+    }
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -62,6 +68,10 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
         return mMovies.get(position);
     }
 
+    public ArrayList<Movie> getAllItems() {
+        return mMovies;
+    }
+
 
     // Create new views (invoked by the layout manager)
     @Override
@@ -91,9 +101,6 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
     public void onBindViewHolder(final ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-
-        //hide existing data
-        holder.mImageView.setVisibility(View.INVISIBLE);
 
         //Build URL to download image
         Uri.Builder builder = new Uri.Builder();
@@ -140,17 +147,7 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
                 .load(url)
                 .resize(targetWidth, targetHeight)
                 .centerCrop()
-                .into(holder.mImageView, new com.squareup.picasso.Callback() {
-                    @Override
-                    public void onSuccess() {
-                        holder.mImageView.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onError() {
-
-                    }
-                });
+                .into(holder.mImageView);
 
 
     }

@@ -2,6 +2,7 @@ package uk.co.rustynailor.android.popularmovies;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 /**
  *  Created by russellhicks on 02/02/16.
@@ -15,14 +16,19 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
     public static String TAG = EndlessRecyclerOnScrollListener.class.getSimpleName();
 
-    private int mPreviousTotal = 20; // The total number of items in the dataset after the initial load
+    private int mPreviousTotal; // The total number of items in the dataset after the initial load
     private boolean mLoading = false; // True if we are still waiting for the last set of data to load.
-    private int mVisibleThreshold = 2; // The minimum amount of items to have below your current scroll position before loading more.
+    private int mVisibleThreshold = 6; // The minimum amount of items to have below your current scroll position before loading more.
     int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount;
 
-    private int mCurrent_page = 1;
+    //private int mCurrent_page = 1;
 
     private GridLayoutManager mGridLayoutManager;
+
+    public EndlessRecyclerOnScrollListener(int mPreviousTotal, GridLayoutManager mGridLayoutManager) {
+        this.mPreviousTotal = mPreviousTotal;
+        this.mGridLayoutManager = mGridLayoutManager;
+    }
 
     public EndlessRecyclerOnScrollListener(GridLayoutManager gridLayoutManager) {
         this.mGridLayoutManager = gridLayoutManager;
@@ -35,8 +41,9 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
         mVisibleItemCount = recyclerView.getChildCount();
         mTotalItemCount = mGridLayoutManager.getItemCount();
         mFirstVisibleItem = mGridLayoutManager.findFirstVisibleItemPosition();
-
+        
         if (mLoading) {
+
             if (mTotalItemCount > mPreviousTotal) {
                 mLoading = false;
                 mPreviousTotal = mTotalItemCount;
@@ -44,12 +51,17 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
         }
 
         if (!mLoading &&
+                mFirstVisibleItem != -1 && //deal with repopulated array from onRotate
                 (mTotalItemCount - mVisibleItemCount)
                 <= (mFirstVisibleItem + mVisibleThreshold)) {
+            Log.e("ENDLESS", "TotalItemCount: " + mTotalItemCount);
+            Log.e("ENDLESS", "mVisibleItemCount: " + mVisibleItemCount);
+            Log.e("ENDLESS", "mFirstVisibleItem: " + mFirstVisibleItem);
+            Log.e("ENDLESS", "mVisibleThreshold: " + mVisibleThreshold);
             // End has been reached
             // Trigger Load in calling Activity
-            mCurrent_page++;
-            onLoadMore(mCurrent_page);
+            //mCurrent_page++;
+            onLoadMore();
             mLoading = true;
         }
     }
@@ -72,10 +84,10 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
     /** set method for member variable */
     //set page count
-    public void setPageCount(int pageCount){
-        mCurrent_page = pageCount;
-    }
+    //public void setPageCount(int pageCount){
+        //mCurrent_page = pageCount;
+    //}
 
     //this is implemented in MainDiscoveryFragment to carry out the background update
-    public abstract void onLoadMore(int current_page);
+    public abstract void onLoadMore();
 }
