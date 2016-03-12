@@ -36,6 +36,7 @@
         <FrameLayout
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:paddingLeft="20dp"
             android:layout_height="match_parent">
             <ImageView
                 android:layout_width="match_parent"

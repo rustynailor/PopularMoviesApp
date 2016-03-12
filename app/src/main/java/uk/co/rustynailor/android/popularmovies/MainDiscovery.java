@@ -30,12 +30,6 @@ public class MainDiscovery extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //refresh movie list on Resume
-        refreshMovieList();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

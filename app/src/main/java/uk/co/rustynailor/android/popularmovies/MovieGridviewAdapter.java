@@ -1,6 +1,7 @@
 package uk.co.rustynailor.android.popularmovies;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -66,8 +67,9 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
     @Override
     public MovieGridviewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-
         ImageView imageView = new ImageView(mContext);
+        imageView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setPadding(0, 0, 0, 0);
 
         final ViewHolder vh = new ViewHolder(imageView);
@@ -119,16 +121,24 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
                 .getDisplayMetrics()
                 .widthPixels;
 
-        int numColumns = MainDiscoveryFragment.mNumColumns;
 
         //cinema poster ratio, as found here
         //http://www.imdb.com/help/show_leaf?photosspecs
         double posterRatio = 1.48;
 
+        int targetWidth;
+        int targetHeight;
+        //set appropriate size for resizing based on layout type
+        if(MainDiscoveryFragment.mNumColumns == 2){
+            targetWidth = width / MainDiscoveryFragment.mNumColumns;
+        } else {
+            targetWidth = width / MainDiscoveryFragment.mNumColumns / 2;
+        }
+        targetHeight = (int) Math.round((targetWidth) * posterRatio);
 
         Picasso.with(mContext)
                 .load(url)
-                .resize(width / numColumns, (int) Math.round((width / numColumns) * posterRatio))
+                .resize(targetWidth, targetHeight)
                 .centerCrop()
                 .into(holder.mImageView, new com.squareup.picasso.Callback() {
                     @Override

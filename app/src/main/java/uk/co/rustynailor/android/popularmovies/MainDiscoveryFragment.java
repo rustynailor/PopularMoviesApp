@@ -31,7 +31,7 @@ public class MainDiscoveryFragment extends Fragment {
     //number of columns in gridlayout - placed in member var for later
     // manipulation into a tablet layout
     //it is public to allow access from the adapter
-    public static int mNumColumns = 2;
+    public static int mNumColumns;
     //number of movies returned per page from api
     public static int mMoviesPerRequest = 20;
     //boolean to track whether or not this is a two panel tablet layout
@@ -54,6 +54,8 @@ public class MainDiscoveryFragment extends Fragment {
             // (res/layout-sw600dp). If this view is present, then the activity should be
             // in two-pane mode.
             mTwoPane = true;
+            //as we have a table layout, set number of columns to be 3
+            mNumColumns = 3;
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
@@ -65,9 +67,10 @@ public class MainDiscoveryFragment extends Fragment {
             }*/
 
         } else {
+            //as we have a smaller phone layout, set number of columns to be 2
+            mNumColumns = 2;
             mTwoPane = false;
         }
-        Log.e("TWO PANE", "IS: " + mTwoPane);
 
         adapter = new MovieGridviewAdapter(getActivity(), new MovieItemClickListener() {
             @Override

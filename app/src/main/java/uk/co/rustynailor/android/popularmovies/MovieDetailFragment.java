@@ -92,10 +92,22 @@ public class MovieDetailFragment extends Fragment {
         //http://www.imdb.com/help/show_leaf?photosspecs
         double posterRatio = 1.48;
 
+        //set appropriate size for resizing based on layout type
+        int targetWidth;
+        if(MainDiscoveryFragment.mNumColumns == 2){
+            // phone layout - take up 1/2 of screen
+            targetWidth = width / 2;
+        } else {
+            // tablet layout - take up 1/4 of screen
+            targetWidth = width / 4;
+        }
+
+        int targetHeight  =   (int) Math.round(targetWidth * posterRatio);
+
 
         Picasso.with(getActivity())
                 .load(url)
-                .resize(width / numColumns, (int) Math.round((width / numColumns) * posterRatio))
+                .resize(targetWidth, targetHeight)
                 .centerInside()
                 .into(mPoster);
 
