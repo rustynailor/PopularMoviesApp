@@ -9,6 +9,7 @@ import android.os.Parcelable;
  */
 public class Movie implements Parcelable{
 
+    private String mId;
     private String mTitle;
     private String mPosterPath;
     private String mReleaseDate;
@@ -41,6 +42,15 @@ public class Movie implements Parcelable{
                     return new Movie[size];
                 }
             };
+
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        mId = id;
+    }
 
     public void setTitle(String title) {
         mTitle = title;
@@ -105,6 +115,7 @@ public class Movie implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mId);
         dest.writeString(mTitle);
         dest.writeString(mPosterPath);
         dest.writeString(mReleaseDate);
@@ -114,6 +125,7 @@ public class Movie implements Parcelable{
     }
 
     public void readFromParcel(Parcel source){
+        mId = source.readString();
         mTitle = source.readString();
         mPosterPath = source.readString();
         mReleaseDate = source.readString();

@@ -1,6 +1,4 @@
-package uk.co.rustynailor.android.popularmovies;
-
-/**
+package uk.co.rustynailor.android.popularmovies; /**
  * Created by russellhicks on 12/03/16.
  */
 
@@ -26,54 +24,56 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /** Get movie data from the movie db api to display in the app **/
-public class FetchMoviesTask extends AsyncTask<Void, Void, Movie[]> {
+public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
 
     private Context mContext;
-    private MovieGridviewAdapter mAdapter;
+    private String mMovieId;
 
-    public FetchMoviesTask(Context mContext, MovieGridviewAdapter mAdapter) {
-        this.mContext = mContext;
-        this.mAdapter = mAdapter;
+    public FetchTrailersTask(Context context, String movieId) {
+        mContext = context;
+        mMovieId = movieId;
     }
 
-    private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
+    private final String LOG_TAG = FetchTrailersTask.class.getSimpleName();
 
     /**
      * Take the String representing the complete forecast in JSON Format and
      * pull out the data we need for our movie app.
      */
-    private Movie[] getMovieDataFromJson(String movieJsonStr)
+    private Trailer[] getTrailerDataFromJson(String trailerJsonStr)
             throws JSONException {
 
+
         // These are the names of the JSON objects we need
-        final String MOVIE_LIST = "results";
-        final String MOVIE_ID = "id";
-        final String MOVIE_TITLE = "original_title";
-        final String MOVIE_IMAGE_PATH = "poster_path";
-        final String MOVIE_RELEASE_DATE = "release_date";
-        final String MOVIE_RATING = "vote_average";
-        final String MOVIE_DESCRIPTION = "overview";
+        final String TRAILER_LIST = "results";
+        final String TRAILER_ID = "id";
+        final String TRAILER_KEY = "key";
+        final String TRAILER_NAME = "name";
+        final String TRAILER_SITE = "site";
+        final String TRAILER_SIZE = "size";
+        final String TRAILER_TYPE = "type";
 
-        JSONObject movieJson = new JSONObject(movieJsonStr);
-        JSONArray movieArray = movieJson.getJSONArray(MOVIE_LIST);
+        JSONObject trailerJson = new JSONObject(trailerJsonStr);
+        JSONArray trailerArray = trailerJson.getJSONArray(TRAILER_LIST);
 
-        Movie[] result = new Movie[movieArray.length()];
-        for(int i = 0; i < movieArray.length(); i++) {
+        Trailer[] result = new Trailer[trailerArray.length()];
+        for(int i = 0; i < trailerArray.length(); i++) {
 
-            // Get the JSON object representing the movie
-            JSONObject movieData = movieArray.getJSONObject(i);
+            // Get the JSON object representing the trailer
+            JSONObject trailerData = trailerArray.getJSONObject(i);
 
-            Movie movie = new Movie();
+            Trailer trailer = new Trailer();
 
             //extract necessary fields
-            movie.setId(movieData.getString(MOVIE_ID));
-            movie.setTitle(movieData.getString(MOVIE_TITLE));
-            movie.setPosterPath(movieData.getString(MOVIE_IMAGE_PATH));
-            movie.setReleaseDate(movieData.getString(MOVIE_RELEASE_DATE));
-            movie.setVoteAverage(movieData.getString(MOVIE_RATING));
-            movie.setMovieDescription(movieData.getString(MOVIE_DESCRIPTION));
+            trailer.setId(trailerData.getString(TRAILER_ID));
+            trailer.setKey(trailerData.getString(TRAILER_KEY));
+            trailer.setName(trailerData.getString(TRAILER_NAME));
+            trailer.setSite(trailerData.getString(TRAILER_SITE));
+            trailer.setSize(trailerData.getInt(TRAILER_SIZE));
+            trailer.setType(trailerData.getString(TRAILER_TYPE));
 
-            result[i] = movie;
+            result[i] = trailer
+            ;
         }
 
 
@@ -84,7 +84,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, Movie[]> {
 
 
     @Override
-    protected Movie[] doInBackground(Void...params){
+    protected Trailer[] doInBackground(Void...params){
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -101,23 +101,20 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, Movie[]> {
             final String MOVIE_API_AUTHORITY = "api.themoviedb.org";
             final String MOVIE_API_PATH_1 = "3";
             final String MOVIE_API_PATH_2 = "movie";
+            final String MOVIE_API_PATH_3 = "videos";
 
-            //get sort order from shared preferences
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-            String movie_sort_order = prefs.getString(mContext.getString(R.string.pref_movie_sort_order_key), mContext.getString(R.string.pref_movie_sort_order_default_value));
 
 
             builder.scheme("https")
                     .authority(MOVIE_API_AUTHORITY)
                     .appendPath(MOVIE_API_PATH_1)
                     .appendPath(MOVIE_API_PATH_2)
-                    .appendPath(movie_sort_order)
-                    .appendQueryParameter("api_key", BuildConfig.MY_MOVIES_SAVED_API_KEY)
-                    .appendQueryParameter("page", Integer.toString(MainDiscoveryFragment.mPageCount));
+                    .appendPath(mMovieId)
+                    .appendPath(MOVIE_API_PATH_3);
 
             URL url = new URL(builder.build().toString());
 
-            Log.e(LOG_TAG, "Getting page: " + MainDiscoveryFragment.mPageCount + "|" + url);
+            Log.e(LOG_TAG, "Getting page: " + MainDiscoveryFragment.mPageCount);
 
 
             // Create the request to TheMovieDb, and open the connection
@@ -178,7 +175,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, Movie[]> {
         //now convert JsonString to something usable
         try {
             if(movieJsonStr != null && !movieJsonStr.equals("")) {
-                Movie[] returnArray = getMovieDataFromJson(movieJsonStr);
+                Trailer[] returnArray = getTrailerDataFromJson(movieJsonStr);
                 return returnArray;
             }
         } catch (JSONException e) {
@@ -188,13 +185,13 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, Movie[]> {
     }
 
     @Override
-    protected void onPostExecute(Movie[] movieData) {
-        super.onPostExecute(movieData);
-        if(movieData != null) {
-            for (Movie movie : movieData) {
-                mAdapter.add(movie);
-                mAdapter.notifyDataSetChanged();
-            }
+    protected void onPostExecute(Trailer[] trailerData) {
+        super.onPostExecute(trailerData);
+        if(trailerData != null) {
+            //for (Movie movie : movieData) {
+                //mAdapter.add(movie);
+                //mAdapter.notifyDataSetChanged();
+         //   }
         }
     }
 }
