@@ -12,6 +12,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import uk.co.rustynailor.android.popularmovies.models.Movie;
+import uk.co.rustynailor.android.popularmovies.network.FetchMoviesTask;
+import uk.co.rustynailor.android.popularmovies.network.FetchReviewsTask;
+import uk.co.rustynailor.android.popularmovies.network.FetchTrailersTask;
+
 
 /**
  * A fragment containing a singel movie view
@@ -44,6 +49,10 @@ public class MovieDetailFragment extends Fragment {
            //started by Movie detail activity - get args from parent
             mMovie = (Movie) getActivity().getIntent().getExtras().getParcelable(getActivity().getString(R.string.parceled_movie_identifier));
         }
+
+        //load trailers and reviews
+        new FetchTrailersTask(getContext(), mMovie.getId()).execute();
+        new FetchReviewsTask(getContext(), mMovie.getId()).execute();
 
         //assign to TextViews
         mMovieTitle = (TextView) view.findViewById(R.id.movieTitle);

@@ -1,7 +1,6 @@
 package uk.co.rustynailor.android.popularmovies;
 
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+
+import uk.co.rustynailor.android.popularmovies.models.Movie;
+import uk.co.rustynailor.android.popularmovies.network.FetchMoviesTask;
 
 
 /**

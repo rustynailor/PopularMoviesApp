@@ -1,7 +1,6 @@
 package uk.co.rustynailor.android.popularmovies;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,6 +11,8 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import uk.co.rustynailor.android.popularmovies.models.Movie;
 
 /**
  * Adapter to movie list recyclerview

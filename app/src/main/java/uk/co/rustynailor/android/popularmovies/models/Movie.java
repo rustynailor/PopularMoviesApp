@@ -1,4 +1,4 @@
-package uk.co.rustynailor.android.popularmovies;
+package uk.co.rustynailor.android.popularmovies.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;

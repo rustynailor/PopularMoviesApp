@@ -1,13 +1,11 @@
-package uk.co.rustynailor.android.popularmovies; /**
+package uk.co.rustynailor.android.popularmovies.network; /**
  * Created by russellhicks on 12/03/16.
  */
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -23,56 +21,58 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import uk.co.rustynailor.android.popularmovies.BuildConfig;
+import uk.co.rustynailor.android.popularmovies.MainDiscoveryFragment;
+import uk.co.rustynailor.android.popularmovies.R;
+import uk.co.rustynailor.android.popularmovies.models.Review;
+
 /** Get movie data from the movie db api to display in the app **/
-public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
+public class FetchReviewsTask extends AsyncTask<Void, Void, Review[]> {
 
     private Context mContext;
     private String mMovieId;
 
-    public FetchTrailersTask(Context context, String movieId) {
+    public FetchReviewsTask(Context context, String movieId) {
         mContext = context;
         mMovieId = movieId;
     }
 
-    private final String LOG_TAG = FetchTrailersTask.class.getSimpleName();
+    private final String LOG_TAG = FetchReviewsTask.class.getSimpleName();
 
     /**
      * Take the String representing the complete forecast in JSON Format and
      * pull out the data we need for our movie app.
      */
-    private Trailer[] getTrailerDataFromJson(String trailerJsonStr)
+    private Review[] getReviewDataFromJson(String ReviewJsonStr)
             throws JSONException {
 
 
         // These are the names of the JSON objects we need
-        final String TRAILER_LIST = "results";
-        final String TRAILER_ID = "id";
-        final String TRAILER_KEY = "key";
-        final String TRAILER_NAME = "name";
-        final String TRAILER_SITE = "site";
-        final String TRAILER_SIZE = "size";
-        final String TRAILER_TYPE = "type";
+        final String REVIEW_LIST = "results";
+        final String REVIEW_ID = "id";
+        final String REVIEW_AUTHOR = "author";
+        final String REVIEW_CONTENT = "content";
+        final String REVIEW_URL = "url";
 
-        JSONObject trailerJson = new JSONObject(trailerJsonStr);
-        JSONArray trailerArray = trailerJson.getJSONArray(TRAILER_LIST);
+        JSONObject ReviewJson = new JSONObject(ReviewJsonStr);
+        JSONArray ReviewArray = ReviewJson.getJSONArray(REVIEW_LIST);
 
-        Trailer[] result = new Trailer[trailerArray.length()];
-        for(int i = 0; i < trailerArray.length(); i++) {
+        Review[] result = new Review[ReviewArray.length()];
+        for(int i = 0; i < ReviewArray.length(); i++) {
 
-            // Get the JSON object representing the trailer
-            JSONObject trailerData = trailerArray.getJSONObject(i);
+            // Get the JSON object representing the Review
+            JSONObject ReviewData = ReviewArray.getJSONObject(i);
 
-            Trailer trailer = new Trailer();
+            Review Review = new Review();
 
             //extract necessary fields
-            trailer.setId(trailerData.getString(TRAILER_ID));
-            trailer.setKey(trailerData.getString(TRAILER_KEY));
-            trailer.setName(trailerData.getString(TRAILER_NAME));
-            trailer.setSite(trailerData.getString(TRAILER_SITE));
-            trailer.setSize(trailerData.getInt(TRAILER_SIZE));
-            trailer.setType(trailerData.getString(TRAILER_TYPE));
+            Review.setId(ReviewData.getString(REVIEW_ID));
+            Review.setAuthor(ReviewData.getString(REVIEW_AUTHOR));
+            Review.setContent(ReviewData.getString(REVIEW_CONTENT));
+            Review.setUrl(ReviewData.getString(REVIEW_URL));
+            Review.setMovieId(mMovieId);
 
-            result[i] = trailer
+            result[i] = Review
             ;
         }
 
@@ -84,7 +84,7 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
 
 
     @Override
-    protected Trailer[] doInBackground(Void...params){
+    protected Review[] doInBackground(Void...params){
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -101,7 +101,7 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
             final String MOVIE_API_AUTHORITY = "api.themoviedb.org";
             final String MOVIE_API_PATH_1 = "3";
             final String MOVIE_API_PATH_2 = "movie";
-            final String MOVIE_API_PATH_3 = "videos";
+            final String MOVIE_API_PATH_3 = "reviews";
 
 
 
@@ -110,11 +110,12 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
                     .appendPath(MOVIE_API_PATH_1)
                     .appendPath(MOVIE_API_PATH_2)
                     .appendPath(mMovieId)
-                    .appendPath(MOVIE_API_PATH_3);
+                    .appendPath(MOVIE_API_PATH_3)
+                    .appendQueryParameter("api_key", BuildConfig.MY_MOVIES_SAVED_API_KEY)
+                    .appendQueryParameter("page", Integer.toString(MainDiscoveryFragment.mPageCount));
 
             URL url = new URL(builder.build().toString());
 
-            Log.e(LOG_TAG, "Getting page: " + MainDiscoveryFragment.mPageCount);
 
 
             // Create the request to TheMovieDb, and open the connection
@@ -175,7 +176,7 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
         //now convert JsonString to something usable
         try {
             if(movieJsonStr != null && !movieJsonStr.equals("")) {
-                Trailer[] returnArray = getTrailerDataFromJson(movieJsonStr);
+                Review[] returnArray = getReviewDataFromJson(movieJsonStr);
                 return returnArray;
             }
         } catch (JSONException e) {
@@ -185,9 +186,9 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
     }
 
     @Override
-    protected void onPostExecute(Trailer[] trailerData) {
-        super.onPostExecute(trailerData);
-        if(trailerData != null) {
+    protected void onPostExecute(Review[] ReviewData) {
+        super.onPostExecute(ReviewData);
+        if(ReviewData != null) {
             //for (Movie movie : movieData) {
                 //mAdapter.add(movie);
                 //mAdapter.notifyDataSetChanged();
