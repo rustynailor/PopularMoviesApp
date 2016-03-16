@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -29,6 +30,7 @@ public class MovieDetailFragment extends Fragment {
     private TextView mRating;
     private TextView mSynopsis;
     private ImageView mPoster;
+    private LinearLayout mTrailerContainer;
 
 
     public MovieDetailFragment() {
@@ -50,8 +52,10 @@ public class MovieDetailFragment extends Fragment {
             mMovie = (Movie) getActivity().getIntent().getExtras().getParcelable(getActivity().getString(R.string.parceled_movie_identifier));
         }
 
+        mTrailerContainer = (LinearLayout)view.findViewById(R.id.trailerContainer);
+
         //load trailers and reviews
-        new FetchTrailersTask(getContext(), mMovie.getId()).execute();
+        new FetchTrailersTask(getContext(), mMovie.getId(), mTrailerContainer).execute();
         new FetchReviewsTask(getContext(), mMovie.getId()).execute();
 
         //assign to TextViews

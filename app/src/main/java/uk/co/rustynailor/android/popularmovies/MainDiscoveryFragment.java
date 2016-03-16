@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import uk.co.rustynailor.android.popularmovies.adapters.MovieGridviewAdapter;
 import uk.co.rustynailor.android.popularmovies.models.Movie;
 import uk.co.rustynailor.android.popularmovies.network.FetchMoviesTask;
 

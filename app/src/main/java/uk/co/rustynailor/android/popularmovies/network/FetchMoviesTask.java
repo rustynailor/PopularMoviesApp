@@ -27,7 +27,7 @@ import java.net.URL;
 
 import uk.co.rustynailor.android.popularmovies.BuildConfig;
 import uk.co.rustynailor.android.popularmovies.MainDiscoveryFragment;
-import uk.co.rustynailor.android.popularmovies.MovieGridviewAdapter;
+import uk.co.rustynailor.android.popularmovies.adapters.MovieGridviewAdapter;
 import uk.co.rustynailor.android.popularmovies.R;
 import uk.co.rustynailor.android.popularmovies.models.Movie;
 

@@ -1,4 +1,4 @@
-package uk.co.rustynailor.android.popularmovies;
+package uk.co.rustynailor.android.popularmovies.adapters;
 
 import android.content.Context;
 import android.net.Uri;
@@ -12,6 +12,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import uk.co.rustynailor.android.popularmovies.MainDiscoveryFragment;
+import uk.co.rustynailor.android.popularmovies.MovieItemClickListener;
 import uk.co.rustynailor.android.popularmovies.models.Movie;
 
 /**

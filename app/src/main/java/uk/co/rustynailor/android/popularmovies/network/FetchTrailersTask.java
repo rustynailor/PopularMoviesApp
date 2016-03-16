@@ -4,15 +4,22 @@ package uk.co.rustynailor.android.popularmovies.network; /**
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,10 +38,12 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
 
     private Context mContext;
     private String mMovieId;
+    private LinearLayout mTrailerContainer;
 
-    public FetchTrailersTask(Context context, String movieId) {
+    public FetchTrailersTask(Context context, String movieId, LinearLayout trailerContainer) {
         mContext = context;
         mMovieId = movieId;
+        mTrailerContainer = trailerContainer;
     }
 
     private final String LOG_TAG = FetchTrailersTask.class.getSimpleName();
@@ -78,8 +87,6 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
             result[i] = trailer
             ;
         }
-
-
 
         return result;
 
@@ -191,10 +198,35 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
     protected void onPostExecute(Trailer[] trailerData) {
         super.onPostExecute(trailerData);
         if(trailerData != null) {
-            //for (Movie movie : movieData) {
-                //mAdapter.add(movie);
-                //mAdapter.notifyDataSetChanged();
-         //   }
+            for (Trailer trailer : trailerData) {
+
+                //add trailer to Linear Layout
+                LayoutInflater inflater = LayoutInflater.from(mContext);
+
+                LinearLayout trailerSingle = (LinearLayout)inflater.inflate(R.layout.single_trailer, null);
+
+
+                TextView trailerName = (TextView)trailerSingle.findViewById(R.id.trailerTitle);
+                trailerName.setText(trailer.getName());
+
+
+
+                //finally, add a listener to launch the video
+
+                trailerSingle.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        // launch intent
+                    }
+                });
+
+                //add to layout
+                mTrailerContainer.addView(trailerSingle);
+
+
+
+            }
         }
     }
 }
