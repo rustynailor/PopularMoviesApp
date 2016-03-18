@@ -198,7 +198,9 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
     protected void onPostExecute(Trailer[] trailerData) {
         super.onPostExecute(trailerData);
         if(trailerData != null) {
-            mTrailerContainer.setVisibility(View.VISIBLE);
+            if(trailerData.length > 0) {
+                mTrailerContainer.setVisibility(View.VISIBLE);
+            }
             for (Trailer trailer : trailerData) {
 
                 //add trailer to Linear Layout
