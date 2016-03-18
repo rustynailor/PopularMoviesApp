@@ -24,6 +24,7 @@
   <component name="ChangeListManager">
     <list default="true" id="57b88ffd-b4a0-4042-ab57-29a8bb2ba096" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/uk/co/rustynailor/android/popularmovies/network/FetchTrailersTask.java" afterPath="$PROJECT_DIR$/app/src/main/java/uk/co/rustynailor/android/popularmovies/network/FetchTrailersTask.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="PopularMoviesApp.iws" />
@@ -57,8 +58,22 @@
       <file leaf-file-name="FetchTrailersTask.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/co/rustynailor/android/popularmovies/network/FetchTrailersTask.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.494396">
-              <caret line="202" column="13" selection-start-line="202" selection-start-column="13" selection-end-line="202" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.60024905">
+              <caret line="176" column="13" selection-start-line="176" selection-start-column="13" selection-end-line="176" selection-end-column="13" />
+              <folding>
+                <element signature="e#6039#6089#0" expanded="true" />
+                <element signature="e#7844#8698#0" expanded="true" />
+                <element signature="e#8697#8698#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="strings.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-15.555555">
+              <caret line="28" column="24" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -1676,7 +1691,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/uk/co/rustynailor/android/popularmovies/MovieItemClickListener.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/uk/co/rustynailor/android/popularmovies/SettingsActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/uk/co/rustynailor/android/popularmovies/MovieDetail.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/gradle.properties" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
@@ -1698,6 +1712,7 @@
         <option value="$PROJECT_DIR$/app/src/main/java/uk/co/rustynailor/android/popularmovies/adapters/TrailerListviewAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/single_trailer.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_movie_detail.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/uk/co/rustynailor/android/popularmovies/network/FetchTrailersTask.java" />
       </list>
     </option>
@@ -2399,7 +2414,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32851985" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.26714802" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" x="-1162" y="305" width="1162" height="586" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.26714802" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" x="-1162" y="305" width="1162" height="586" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39951864" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
@@ -2586,13 +2601,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="282" column="0" selection-start-line="282" selection-start-column="0" selection-end-line="282" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.5555556">
-          <caret line="1" column="38" selection-start-line="1" selection-start-column="28" selection-end-line="1" selection-end-column="38" />
         </state>
       </provider>
     </entry>
@@ -2857,11 +2865,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-15.555555">
+          <caret line="28" column="24" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/co/rustynailor/android/popularmovies/network/FetchTrailersTask.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.494396">
-          <caret line="202" column="13" selection-start-line="202" selection-start-column="13" selection-end-line="202" selection-end-column="13" />
-          <folding />
+        <state vertical-scroll-proportion="0.60024905">
+          <caret line="176" column="13" selection-start-line="176" selection-start-column="13" selection-end-line="176" selection-end-column="13" />
+          <folding>
+            <element signature="e#6039#6089#0" expanded="true" />
+            <element signature="e#7844#8698#0" expanded="true" />
+            <element signature="e#8697#8698#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

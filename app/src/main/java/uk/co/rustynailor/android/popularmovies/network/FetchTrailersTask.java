@@ -3,7 +3,9 @@ package uk.co.rustynailor.android.popularmovies.network; /**
  */
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -162,7 +164,7 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
             // alert the user with a toast
             ((Activity)mContext).runOnUiThread(new Runnable() {
                 public void run() {
-                    Toast toast = Toast.makeText(mContext, mContext.getString(R.string.connection_error_message), Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(mContext, mContext.getString(R.string.trailer_error_message), Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER, 0, 0);
                     toast.show();
                 }
@@ -201,7 +203,7 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
             if(trailerData.length > 0) {
                 mTrailerContainer.setVisibility(View.VISIBLE);
             }
-            for (Trailer trailer : trailerData) {
+            for (final Trailer trailer : trailerData) {
 
                 //add trailer to Linear Layout
                 LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -215,19 +217,25 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
 
 
                 //finally, add a listener to launch the video
-
                 trailerSingle.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
-                        // launch intent
+                        // intent launch code based on http://stackoverflow.com/questions/574195/android-youtube-app-play-video-intent
+                        //to handle both youtube and web players
+                        try {
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailer.getKey()));
+                            mContext.startActivity(intent);
+                        } catch (ActivityNotFoundException ex) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + trailer.getKey()));
+                            mContext.startActivity(intent);
+                        }
+
                     }
                 });
 
                 //add to layout
                 mTrailerContainer.addView(trailerSingle);
-
-
 
             }
         }
