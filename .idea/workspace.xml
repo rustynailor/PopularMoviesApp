@@ -22,11 +22,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57b88ffd-b4a0-4042-ab57-29a8bb2ba096" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/uk/co/rustynailor/android/popularmovies/network/FetchTrailersTask.java" afterPath="$PROJECT_DIR$/app/src/main/java/uk/co/rustynailor/android/popularmovies/network/FetchTrailersTask.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="57b88ffd-b4a0-4042-ab57-29a8bb2ba096" name="Default" comment="" />
     <ignored path="PopularMoviesApp.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
