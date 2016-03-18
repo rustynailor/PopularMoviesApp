@@ -46,12 +46,19 @@ public class MainDiscoveryFragment extends Fragment {
     private static final String MOVIEDETAILFRAGMENT_TAG = "MDFTAG";
 
 
+    //used for continuous loading
+    private int previousTotal = 0;
+    private boolean loading = true;
+    private int visibleThreshold = 5;
+    int firstVisibleItem, visibleItemCount, totalItemCount;
+
     //used to store list state to preserve position
     private int mSavedListPosition;
     private static final String LIST_STATE_KEY = "LIST_STATE_KEY";
     private static final String PAGE_COUNT_KEY = "PAGE_COUNT_KEY";
     private static final String MOVIE_ARRAY_KEY = "MOVIE_ARRAY_KEY";
     private ArrayList<Movie> mInitialMovies;
+
 
     public MainDiscoveryFragment() {
     }
@@ -149,6 +156,39 @@ public class MainDiscoveryFragment extends Fragment {
         mLayoutManager = new GridLayoutManager(getActivity(), mNumColumns, GridLayoutManager.VERTICAL, false);
         mRecyclerview.setLayoutManager(mLayoutManager);
 
+        mRecyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                visibleItemCount = mRecyclerview.getChildCount();
+                totalItemCount = mLayoutManager.getItemCount();
+                firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
+
+                if (loading) {
+                    if (totalItemCount > previousTotal) {
+                        loading = false;
+                        previousTotal = totalItemCount;
+                    }
+                }
+                if (!loading && (totalItemCount - visibleItemCount)
+                        <= (firstVisibleItem + visibleThreshold)) {
+                    // End has been reached
+                    Log.e   ("Yaeye!", "end called");
+
+
+                    // Do something
+                    mPageCount++;
+                    updateMovies();
+
+                    loading = true;
+                }
+            }
+        });
+
+        /*
+
         mEndlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(initialMovieCount, mLayoutManager) {
             @Override
             public void onLoadMore() {
@@ -159,11 +199,17 @@ public class MainDiscoveryFragment extends Fragment {
             }
         };
 
-        mRecyclerview.setOnScrollListener(mEndlessRecyclerOnScrollListener);
+        mRecyclerview.setOnScrollListener(mEndlessRecyclerOnScrollListener);*/
+
+
+
+
+
 
         mRecyclerview.setAdapter(adapter);
         mRecyclerview.scrollToPosition(mSavedListPosition);
-
+        //mRecyclerview.requestFocusFromTouch();
+        //mRecyclerview.scrollToPosition(mSavedListPosition);
 
     }
 

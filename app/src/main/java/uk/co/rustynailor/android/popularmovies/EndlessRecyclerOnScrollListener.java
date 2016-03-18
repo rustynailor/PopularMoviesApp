@@ -54,10 +54,6 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
                 mFirstVisibleItem != -1 && //deal with repopulated array from onRotate
                 (mTotalItemCount - mVisibleItemCount)
                 <= (mFirstVisibleItem + mVisibleThreshold)) {
-            Log.e("ENDLESS", "TotalItemCount: " + mTotalItemCount);
-            Log.e("ENDLESS", "mVisibleItemCount: " + mVisibleItemCount);
-            Log.e("ENDLESS", "mFirstVisibleItem: " + mFirstVisibleItem);
-            Log.e("ENDLESS", "mVisibleThreshold: " + mVisibleThreshold);
             // End has been reached
             // Trigger Load in calling Activity
             //mCurrent_page++;

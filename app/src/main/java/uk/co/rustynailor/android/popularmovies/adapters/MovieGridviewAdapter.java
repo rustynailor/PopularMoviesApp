@@ -142,6 +142,7 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
         if(MainDiscoveryFragment.mNumColumns == 2){
             targetWidth = width / MainDiscoveryFragment.mNumColumns;
         } else {
+            //2 pane layout, so reduce width by 50%
             targetWidth = width / MainDiscoveryFragment.mNumColumns / 2;
         }
         targetHeight = (int) Math.round((targetWidth) * posterRatio);

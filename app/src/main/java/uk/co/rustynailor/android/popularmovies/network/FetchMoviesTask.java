@@ -45,7 +45,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, Movie[]> {
     private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
 
     /**
-     * Take the String representing the complete forecast in JSON Format and
+     * Take the String representing the movie in JSON Format and
      * pull out the data we need for our movie app.
      */
     private Movie[] getMovieDataFromJson(String movieJsonStr)
