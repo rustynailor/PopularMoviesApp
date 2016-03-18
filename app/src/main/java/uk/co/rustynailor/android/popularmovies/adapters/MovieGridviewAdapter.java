@@ -24,18 +24,44 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
     private Context mContext;
     private ArrayList<Movie> mMovies;
     private MovieItemClickListener mListener;
+    private int mTargetHeight, mTargetWidth;
 
 
     public MovieGridviewAdapter(Context c, MovieItemClickListener listener) {
         mContext = c;
         mMovies = new ArrayList<Movie>();
         mListener = listener;
+        calculateDimensions();
     }
 
     public MovieGridviewAdapter(Context c, MovieItemClickListener listener, ArrayList<Movie> movies) {
         mContext = c;
         mMovies = movies;
         mListener = listener;
+        calculateDimensions();
+    }
+
+    private void calculateDimensions(){
+
+        //get display width to resize images accurately
+        int width= mContext.getResources()
+                .getDisplayMetrics()
+                .widthPixels;
+
+        //cinema poster ratio, as found here
+        //http://www.imdb.com/help/show_leaf?photosspecs
+        double posterRatio = 1.48;
+
+
+        //set appropriate size for resizing based on layout type
+        if(MainDiscoveryFragment.mNumColumns == 2){
+            mTargetWidth = width / MainDiscoveryFragment.mNumColumns;
+        } else {
+            //2 pane layout, so reduce width by 50%
+            mTargetWidth = width / MainDiscoveryFragment.mNumColumns / 2;
+        }
+        mTargetHeight = (int) Math.round((mTargetWidth) * posterRatio);
+
     }
 
     // Provide a reference to the views for each data item
@@ -81,7 +107,7 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
     public MovieGridviewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         ImageView imageView = new ImageView(mContext);
-        imageView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        imageView.setLayoutParams(new GridView.LayoutParams(mTargetWidth, mTargetHeight));
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setPadding(0, 0, 0, 0);
 
@@ -126,30 +152,9 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
 
         String url = builder.build().toString();
 
-        //get display width to resize images accurately
-        int width= mContext.getResources()
-                .getDisplayMetrics()
-                .widthPixels;
-
-
-        //cinema poster ratio, as found here
-        //http://www.imdb.com/help/show_leaf?photosspecs
-        double posterRatio = 1.48;
-
-        int targetWidth;
-        int targetHeight;
-        //set appropriate size for resizing based on layout type
-        if(MainDiscoveryFragment.mNumColumns == 2){
-            targetWidth = width / MainDiscoveryFragment.mNumColumns;
-        } else {
-            //2 pane layout, so reduce width by 50%
-            targetWidth = width / MainDiscoveryFragment.mNumColumns / 2;
-        }
-        targetHeight = (int) Math.round((targetWidth) * posterRatio);
-
         Picasso.with(mContext)
                 .load(url)
-                .resize(targetWidth, targetHeight)
+                .resize(mTargetWidth, mTargetHeight)
                 .centerCrop()
                 .into(holder.mImageView);
 

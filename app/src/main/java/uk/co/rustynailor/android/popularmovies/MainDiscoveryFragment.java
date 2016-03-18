@@ -46,12 +46,6 @@ public class MainDiscoveryFragment extends Fragment {
     private static final String MOVIEDETAILFRAGMENT_TAG = "MDFTAG";
 
 
-    //used for continuous loading
-    private int previousTotal = 0;
-    private boolean loading = true;
-    private int visibleThreshold = 5;
-    int firstVisibleItem, visibleItemCount, totalItemCount;
-
     //used to store list state to preserve position
     private int mSavedListPosition;
     private static final String LIST_STATE_KEY = "LIST_STATE_KEY";
@@ -109,10 +103,9 @@ public class MainDiscoveryFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
             // Retrieve list state and list/item positions
             if(savedInstanceState != null) {
-                mSavedListPosition = savedInstanceState.getInt(LIST_STATE_KEY);
-                mPageCount = savedInstanceState.getInt(PAGE_COUNT_KEY);
-                mInitialMovies = savedInstanceState.getParcelableArrayList(MOVIE_ARRAY_KEY);
-                Log.e("Discovery", "Movies loaded:" + mInitialMovies.size());
+               mSavedListPosition = savedInstanceState.getInt(LIST_STATE_KEY);
+               mPageCount = savedInstanceState.getInt(PAGE_COUNT_KEY);
+               mInitialMovies = savedInstanceState.getParcelableArrayList(MOVIE_ARRAY_KEY);
             } else {
                 mPageCount = 1;
                 mSavedListPosition = 1;
@@ -144,7 +137,6 @@ public class MainDiscoveryFragment extends Fragment {
             new FetchMoviesTask(getContext(), adapter).execute();
         } else {
             adapter = new MovieGridviewAdapter(getActivity(),movieItemClickListener, mInitialMovies);
-            Log.e("Fetch", "Movies loaded");
             initialMovieCount = mInitialMovies.size();
 
         }
@@ -153,41 +145,10 @@ public class MainDiscoveryFragment extends Fragment {
 
         mRecyclerview = (RecyclerView) mRootView.findViewById(R.id.recyclerview_movies);
         // use a linear layout manager
+        mRecyclerview.setAdapter(adapter);
         mLayoutManager = new GridLayoutManager(getActivity(), mNumColumns, GridLayoutManager.VERTICAL, false);
         mRecyclerview.setLayoutManager(mLayoutManager);
-
-        mRecyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                visibleItemCount = mRecyclerview.getChildCount();
-                totalItemCount = mLayoutManager.getItemCount();
-                firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
-
-                if (loading) {
-                    if (totalItemCount > previousTotal) {
-                        loading = false;
-                        previousTotal = totalItemCount;
-                    }
-                }
-                if (!loading && (totalItemCount - visibleItemCount)
-                        <= (firstVisibleItem + visibleThreshold)) {
-                    // End has been reached
-                    Log.e   ("Yaeye!", "end called");
-
-
-                    // Do something
-                    mPageCount++;
-                    updateMovies();
-
-                    loading = true;
-                }
-            }
-        });
-
-        /*
+        mRecyclerview.setHasFixedSize(true);
 
         mEndlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(initialMovieCount, mLayoutManager) {
             @Override
@@ -195,25 +156,13 @@ public class MainDiscoveryFragment extends Fragment {
                 // load next page of movies
                 mPageCount++;
                 updateMovies();
-                Log.e("Fetch", "load more called");
             }
         };
 
-        mRecyclerview.setOnScrollListener(mEndlessRecyclerOnScrollListener);*/
-
-
-
-
-
-
-        mRecyclerview.setAdapter(adapter);
+        mRecyclerview.addOnScrollListener(mEndlessRecyclerOnScrollListener);
         mRecyclerview.scrollToPosition(mSavedListPosition);
-        //mRecyclerview.requestFocusFromTouch();
-        //mRecyclerview.scrollToPosition(mSavedListPosition);
 
     }
-
-
 
     /** reset adapter and reset page counter to 1 */
     public void clearList() {
@@ -221,7 +170,6 @@ public class MainDiscoveryFragment extends Fragment {
         adapter.notifyDataSetChanged();
         mEndlessRecyclerOnScrollListener.setTotal(mMoviesPerRequest);
         mEndlessRecyclerOnScrollListener.setLoadingState(false);
-        //mEndlessRecyclerOnScrollListener.setPageCount(1);
         mPageCount = 1;
     }
 

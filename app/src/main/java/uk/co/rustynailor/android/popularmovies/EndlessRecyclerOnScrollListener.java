@@ -21,8 +21,6 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     private int mVisibleThreshold = 6; // The minimum amount of items to have below your current scroll position before loading more.
     int mFirstVisibleItem, mVisibleItemCount, mTotalItemCount;
 
-    //private int mCurrent_page = 1;
-
     private GridLayoutManager mGridLayoutManager;
 
     public EndlessRecyclerOnScrollListener(int mPreviousTotal, GridLayoutManager mGridLayoutManager) {
@@ -54,11 +52,10 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
                 mFirstVisibleItem != -1 && //deal with repopulated array from onRotate
                 (mTotalItemCount - mVisibleItemCount)
                 <= (mFirstVisibleItem + mVisibleThreshold)) {
-            // End has been reached
-            // Trigger Load in calling Activity
-            //mCurrent_page++;
-            onLoadMore();
-            mLoading = true;
+                // End has been reached
+                // Trigger Load in calling Activity
+                onLoadMore();
+                mLoading = true;
         }
     }
 
@@ -77,12 +74,6 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     {
         mLoading = loadingState;
     }
-
-    /** set method for member variable */
-    //set page count
-    //public void setPageCount(int pageCount){
-        //mCurrent_page = pageCount;
-    //}
 
     //this is implemented in MainDiscoveryFragment to carry out the background update
     public abstract void onLoadMore();
