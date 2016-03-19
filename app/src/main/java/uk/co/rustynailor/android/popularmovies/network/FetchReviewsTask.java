@@ -3,11 +3,17 @@ package uk.co.rustynailor.android.popularmovies.network; /**
  */
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -25,16 +31,19 @@ import uk.co.rustynailor.android.popularmovies.BuildConfig;
 import uk.co.rustynailor.android.popularmovies.MainDiscoveryFragment;
 import uk.co.rustynailor.android.popularmovies.R;
 import uk.co.rustynailor.android.popularmovies.models.Review;
+import uk.co.rustynailor.android.popularmovies.models.Trailer;
 
 /** Get movie data from the movie db api to display in the app **/
 public class FetchReviewsTask extends AsyncTask<Void, Void, Review[]> {
 
     private Context mContext;
     private String mMovieId;
+    private LinearLayout mReviewsContainer;
 
-    public FetchReviewsTask(Context context, String movieId) {
+    public FetchReviewsTask(Context context, String movieId, LinearLayout reviewsContainer) {
         mContext = context;
         mMovieId = movieId;
+        mReviewsContainer = reviewsContainer;
     }
 
     private final String LOG_TAG = FetchReviewsTask.class.getSimpleName();
@@ -111,12 +120,9 @@ public class FetchReviewsTask extends AsyncTask<Void, Void, Review[]> {
                     .appendPath(MOVIE_API_PATH_2)
                     .appendPath(mMovieId)
                     .appendPath(MOVIE_API_PATH_3)
-                    .appendQueryParameter("api_key", BuildConfig.MY_MOVIES_SAVED_API_KEY)
-                    .appendQueryParameter("page", Integer.toString(MainDiscoveryFragment.mPageCount));
+                    .appendQueryParameter("api_key", BuildConfig.MY_MOVIES_SAVED_API_KEY);
 
             URL url = new URL(builder.build().toString());
-
-
 
             // Create the request to TheMovieDb, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -186,13 +192,29 @@ public class FetchReviewsTask extends AsyncTask<Void, Void, Review[]> {
     }
 
     @Override
-    protected void onPostExecute(Review[] ReviewData) {
-        super.onPostExecute(ReviewData);
-        if(ReviewData != null) {
-            //for (Movie movie : movieData) {
-                //mAdapter.add(movie);
-                //mAdapter.notifyDataSetChanged();
-         //   }
+    protected void onPostExecute(Review[] reviewData) {
+        super.onPostExecute(reviewData);
+        if(reviewData != null) {
+            if(reviewData.length > 0) {
+                mReviewsContainer.setVisibility(View.VISIBLE);
+            }
+            for (Review review : reviewData) {
+
+                //add review to Linear Layout
+                LayoutInflater inflater = LayoutInflater.from(mContext);
+
+                LinearLayout reviewSingle = (LinearLayout)inflater.inflate(R.layout.single_review, null);
+
+                TextView reviewAuthor = (TextView)reviewSingle.findViewById(R.id.authorName);
+                reviewAuthor.setText(review.getAuthor());
+
+                TextView reviewContent = (TextView)reviewSingle.findViewById(R.id.reviewContent);
+                reviewContent.setText(review.getContent());
+
+                //add to layout
+                mReviewsContainer.addView(reviewSingle);
+
+            }
         }
     }
 }

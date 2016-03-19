@@ -52,6 +52,7 @@ public class MainDiscoveryFragment extends Fragment {
     private static final String PAGE_COUNT_KEY = "PAGE_COUNT_KEY";
     private static final String MOVIE_ARRAY_KEY = "MOVIE_ARRAY_KEY";
     private ArrayList<Movie> mInitialMovies;
+    private int mInitialMovieCount;
 
 
     public MainDiscoveryFragment() {
@@ -129,15 +130,14 @@ public class MainDiscoveryFragment extends Fragment {
             }
         };
 
-        int initialMovieCount;
+
         if(mInitialMovies == null){
             adapter = new MovieGridviewAdapter(getActivity(), movieItemClickListener);
-            Log.e("Fetch", "Clean adapter");
-            initialMovieCount = 20;
+            mInitialMovieCount = mMoviesPerRequest;
             new FetchMoviesTask(getContext(), adapter).execute();
         } else {
             adapter = new MovieGridviewAdapter(getActivity(),movieItemClickListener, mInitialMovies);
-            initialMovieCount = mInitialMovies.size();
+            mInitialMovieCount = mInitialMovies.size();
 
         }
 
@@ -150,7 +150,7 @@ public class MainDiscoveryFragment extends Fragment {
         mRecyclerview.setLayoutManager(mLayoutManager);
         mRecyclerview.setHasFixedSize(true);
 
-        mEndlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(initialMovieCount, mLayoutManager) {
+        mEndlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(mInitialMovieCount, mLayoutManager) {
             @Override
             public void onLoadMore() {
                 // load next page of movies

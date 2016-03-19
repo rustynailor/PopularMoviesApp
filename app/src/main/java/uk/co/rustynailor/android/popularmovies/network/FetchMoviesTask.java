@@ -123,9 +123,6 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, Movie[]> {
 
             URL url = new URL(builder.build().toString());
 
-            Log.e(LOG_TAG, "Getting page: " + MainDiscoveryFragment.mPageCount + "|" + url);
-
-
             // Create the request to TheMovieDb, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");

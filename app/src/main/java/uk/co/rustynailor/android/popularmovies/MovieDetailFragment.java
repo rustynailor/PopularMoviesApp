@@ -1,10 +1,16 @@
 package uk.co.rustynailor.android.popularmovies;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -31,9 +37,33 @@ public class MovieDetailFragment extends Fragment {
     private TextView mSynopsis;
     private ImageView mPoster;
     private LinearLayout mTrailerContainer;
+    private LinearLayout mReviewContainer;
+
+    //for sharing intent
+    private ShareActionProvider mShareActionProvider;
+    private MenuItem mSharingButton;
 
 
     public MovieDetailFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getActivity().getMenuInflater().inflate(R.menu.menu_movie_detail, menu);
+
+        // Retrieve the share menu item
+        mSharingButton = menu.findItem(R.id.action_share);
+
+        // Get the provider and hold onto it to set/change the share intent.
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(mSharingButton);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -53,10 +83,12 @@ public class MovieDetailFragment extends Fragment {
         }
 
         mTrailerContainer = (LinearLayout)view.findViewById(R.id.trailerContainer);
+        mReviewContainer = (LinearLayout)view.findViewById(R.id.reviewContainer);
+
 
         //load trailers and reviews
         new FetchTrailersTask(getContext(), mMovie.getId(), mTrailerContainer).execute();
-        new FetchReviewsTask(getContext(), mMovie.getId()).execute();
+        new FetchReviewsTask(getContext(), mMovie.getId(), mReviewContainer).execute();
 
         //assign to TextViews
         mMovieTitle = (TextView) view.findViewById(R.id.movieTitle);
@@ -93,7 +125,6 @@ public class MovieDetailFragment extends Fragment {
 
 
         String url = builder.build().toString();
-        Log.d("MOVIE POSTER VIEW", url);
 
         int width= getActivity().getResources()
                 .getDisplayMetrics()
@@ -125,5 +156,13 @@ public class MovieDetailFragment extends Fragment {
                 .into(mPoster);
 
         return view;
+    }
+
+    /* create intent for sharing trailer */
+    private Intent createShareTrailerIntent(String youTubeUrl) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, youTubeUrl);
+        return shareIntent;
     }
 }

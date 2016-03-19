@@ -120,8 +120,7 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
                     .appendPath(MOVIE_API_PATH_2)
                     .appendPath(mMovieId)
                     .appendPath(MOVIE_API_PATH_3)
-                    .appendQueryParameter("api_key", BuildConfig.MY_MOVIES_SAVED_API_KEY)
-                    .appendQueryParameter("page", Integer.toString(MainDiscoveryFragment.mPageCount));
+                    .appendQueryParameter("api_key", BuildConfig.MY_MOVIES_SAVED_API_KEY);
 
             URL url = new URL(builder.build().toString());
 
