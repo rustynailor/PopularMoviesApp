@@ -8,9 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,11 +41,16 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
     private Context mContext;
     private String mMovieId;
     private LinearLayout mTrailerContainer;
+    private ShareActionProvider mShareActionProvider;
+    private MenuItem mShareButton;
 
-    public FetchTrailersTask(Context context, String movieId, LinearLayout trailerContainer) {
+    public FetchTrailersTask(Context context, String movieId, LinearLayout trailerContainer,
+                             ShareActionProvider shareActionProvider, MenuItem shareButton) {
         mContext = context;
         mMovieId = movieId;
+        mShareButton = shareButton;
         mTrailerContainer = trailerContainer;
+        mShareActionProvider = shareActionProvider;
     }
 
     private final String LOG_TAG = FetchTrailersTask.class.getSimpleName();
@@ -192,14 +200,32 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
         return null;
     }
 
+    /* create intent for sharing trailer */
+    private Intent createShareTrailerIntent(Uri youTubeUrl) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, youTubeUrl.toString());
+        return shareIntent;
+    }
+
     @Override
     protected void onPostExecute(Trailer[] trailerData) {
         super.onPostExecute(trailerData);
         if(trailerData != null) {
             if(trailerData.length > 0) {
                 mTrailerContainer.setVisibility(View.VISIBLE);
+                mShareButton.setVisible(true);
             }
             for (final Trailer trailer : trailerData) {
+
+                //parse youtube URL
+                final Uri youTubeUri = Uri.parse("http://www.youtube.com/watch?v=" + trailer.getKey());
+
+
+                //if this is the first trailer, add a sharing intent:
+                mShareActionProvider.setShareIntent(createShareTrailerIntent(youTubeUri));
+
+
 
                 //add trailer to Linear Layout
                 LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -223,7 +249,7 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailer.getKey()));
                             mContext.startActivity(intent);
                         } catch (ActivityNotFoundException ex) {
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + trailer.getKey()));
+                            Intent intent = new Intent(Intent.ACTION_VIEW, youTubeUri);
                             mContext.startActivity(intent);
                         }
 
@@ -236,4 +262,5 @@ public class FetchTrailersTask extends AsyncTask<Void, Void, Trailer[]> {
             }
         }
     }
+
 }

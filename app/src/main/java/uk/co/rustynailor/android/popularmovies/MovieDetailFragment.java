@@ -61,9 +61,17 @@ public class MovieDetailFragment extends Fragment {
         // Retrieve the share menu item
         mSharingButton = menu.findItem(R.id.action_share);
 
+        //hide it until we are sure we have a trailer
+        mSharingButton.setVisible(false);
+
         // Get the provider and hold onto it to set/change the share intent.
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(mSharingButton);
         super.onCreateOptionsMenu(menu, inflater);
+
+        //load trailers and reviews
+        //we do this here so we can pass the share action provider to the fetch trailers task
+        new FetchTrailersTask(getContext(), mMovie.getId(), mTrailerContainer, mShareActionProvider, mSharingButton).execute();
+        new FetchReviewsTask(getContext(), mMovie.getId(), mReviewContainer).execute();
     }
 
     @Override
@@ -84,11 +92,6 @@ public class MovieDetailFragment extends Fragment {
 
         mTrailerContainer = (LinearLayout)view.findViewById(R.id.trailerContainer);
         mReviewContainer = (LinearLayout)view.findViewById(R.id.reviewContainer);
-
-
-        //load trailers and reviews
-        new FetchTrailersTask(getContext(), mMovie.getId(), mTrailerContainer).execute();
-        new FetchReviewsTask(getContext(), mMovie.getId(), mReviewContainer).execute();
 
         //assign to TextViews
         mMovieTitle = (TextView) view.findViewById(R.id.movieTitle);
@@ -158,11 +161,5 @@ public class MovieDetailFragment extends Fragment {
         return view;
     }
 
-    /* create intent for sharing trailer */
-    private Intent createShareTrailerIntent(String youTubeUrl) {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, youTubeUrl);
-        return shareIntent;
-    }
+
 }
