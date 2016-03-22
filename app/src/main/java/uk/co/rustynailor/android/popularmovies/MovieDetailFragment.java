@@ -1,5 +1,8 @@
 package uk.co.rustynailor.android.popularmovies;
 
+import android.content.ContentProviderOperation;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
@@ -13,12 +16,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
+import uk.co.rustynailor.android.popularmovies.data.FavouriteMovieColumns;
+import uk.co.rustynailor.android.popularmovies.data.FavouriteMovieProvider;
 import uk.co.rustynailor.android.popularmovies.models.Movie;
 import uk.co.rustynailor.android.popularmovies.network.FetchMoviesTask;
 import uk.co.rustynailor.android.popularmovies.network.FetchReviewsTask;
@@ -38,6 +46,7 @@ public class MovieDetailFragment extends Fragment {
     private ImageView mPoster;
     private LinearLayout mTrailerContainer;
     private LinearLayout mReviewContainer;
+    private Button mFavouriteButton;
 
     //for sharing intent
     private ShareActionProvider mShareActionProvider;
@@ -106,6 +115,14 @@ public class MovieDetailFragment extends Fragment {
         mSynopsis = (TextView) view.findViewById(R.id.synopsis);
         mSynopsis.setText(mMovie.getMovieDescription());
 
+        //attach listener to favourite button
+        mFavouriteButton = (Button)view.findViewById(R.id.favourite_button);
+        mFavouriteButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                insertData();
+            }
+        });
         mPoster = (ImageView) view.findViewById(R.id.poster);
 
         //Build URL to download image
@@ -161,5 +178,22 @@ public class MovieDetailFragment extends Fragment {
         return view;
     }
 
+    /* used to add movie to favourites via content provider */
+    public void insertData(){
+        Log.d("Favourites", "insert");
 
+        //Insert movie to database
+        //TODO: ONLY insert new favourites - query first to check
+        ContentValues valuesForInsert = new ContentValues();
+        valuesForInsert.put(FavouriteMovieColumns.API_ID, mMovie.getId());
+        valuesForInsert.put(FavouriteMovieColumns.LENGTH, mMovie.getLength());
+        valuesForInsert.put(FavouriteMovieColumns.MOVIE_DESCRIPTION, mMovie.getMovieDescription());
+        valuesForInsert.put(FavouriteMovieColumns.POSTER_PATH, mMovie.getPosterPath());
+        valuesForInsert.put(FavouriteMovieColumns.RELEASE_DATE, mMovie.getReleaseDate());
+        valuesForInsert.put(FavouriteMovieColumns.TITLE, mMovie.getTitle());
+        valuesForInsert.put(FavouriteMovieColumns.VOTE_AVERAGE, mMovie.getVoteAverage());
+
+        Uri returnUri =  getActivity().getContentResolver().insert(FavouriteMovieProvider.Movies.CONTENT_URI, valuesForInsert);
+
+    }
 }

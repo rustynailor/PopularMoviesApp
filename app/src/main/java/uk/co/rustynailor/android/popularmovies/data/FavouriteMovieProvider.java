@@ -11,13 +11,13 @@ import net.simonvt.schematic.annotation.TableEndpoint;
  * Created by russellhicks on 19/03/16.
  */
 @ContentProvider(authority = FavouriteMovieProvider.AUTHORITY, database = FavouriteMovieDatabase.class)
-public final class FavouriteMovieProvider {
+public final class  FavouriteMovieProvider {
     public static final String AUTHORITY =
             "uk.co.rustynailor.android.popularmovies.data.FavouriteMovieProvider";
     static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
     interface Path{
-        String MOVIES = "movies";;
+        String MOVIES = "movies";
     }
 
     private static Uri buildUri(String ... paths){
@@ -44,5 +44,5 @@ public final class FavouriteMovieProvider {
             return buildUri(Path.MOVIES, String.valueOf(id));
         }
     }
-    
+
 }
