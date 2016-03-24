@@ -16,6 +16,7 @@ public class Movie implements Parcelable{
     private String mVoteAverage;
     private String mMovieDescription;
     private String mLength;
+    private Boolean mIsFavourite;
 
     //constructors added for parcelable
     public Movie(){
@@ -92,20 +93,20 @@ public class Movie implements Parcelable{
         mVoteAverage = voteAverage;
     }
 
-    public String getLength() {
-        return mLength;
-    }
-
-    public void setLength(String length) {
-        mLength = length;
-    }
-
     public String getMovieDescription() {
         return mMovieDescription;
     }
 
     public void setMovieDescription(String mMovieDescription) {
         this.mMovieDescription = mMovieDescription;
+    }
+
+    public Boolean getIsFavourite() {
+        return mIsFavourite;
+    }
+
+    public void setIsFavourite(Boolean isFavourite) {
+        mIsFavourite = isFavourite;
     }
 
     @Override
@@ -122,6 +123,7 @@ public class Movie implements Parcelable{
         dest.writeString(mVoteAverage);
         dest.writeString(mMovieDescription);
         dest.writeString(mLength);
+        dest.writeByte((byte) (mIsFavourite ? 1 : 0));
     }
 
     public void readFromParcel(Parcel source){
@@ -132,6 +134,7 @@ public class Movie implements Parcelable{
         mVoteAverage = source.readString();
         mMovieDescription = source.readString();
         mLength = source.readString();
+        mIsFavourite = source.readByte() != 0;
     }
 
 }

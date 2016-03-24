@@ -1,6 +1,8 @@
 package uk.co.rustynailor.android.popularmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -45,6 +47,10 @@ public class MainDiscoveryFragment extends Fragment {
     private boolean mTwoPane;
     private static final String MOVIEDETAILFRAGMENT_TAG = "MDFTAG";
 
+    //sort order
+    private String mMovieSortOrder;
+    private SharedPreferences mSharedPreferences;
+
 
     //used to store list state to preserve position
     private int mSavedListPosition;
@@ -83,6 +89,8 @@ public class MainDiscoveryFragment extends Fragment {
             mTwoPane = false;
         }
 
+        //get shared preferences - used later to check sort order
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         return mRootView;
     }
@@ -134,7 +142,7 @@ public class MainDiscoveryFragment extends Fragment {
         if(mInitialMovies == null){
             adapter = new MovieGridviewAdapter(getActivity(), movieItemClickListener);
             mInitialMovieCount = mMoviesPerRequest;
-            new FetchMoviesTask(getContext(), adapter).execute();
+            updateMovies();
         } else {
             adapter = new MovieGridviewAdapter(getActivity(),movieItemClickListener, mInitialMovies);
             mInitialMovieCount = mInitialMovies.size();
@@ -173,9 +181,22 @@ public class MainDiscoveryFragment extends Fragment {
         mPageCount = 1;
     }
 
-    /** update the movie list by initiating a background load from the api **/
+    /** update the movie list by initiating a background load from the api or from db **/
     public void updateMovies() {
-        new FetchMoviesTask(getContext(), adapter).execute();
+        //check sort order here - if favourites, we load from db
+        mMovieSortOrder = mSharedPreferences.getString(getContext().getString(R.string.pref_movie_sort_order_key),
+                getContext().getString(R.string.pref_movie_sort_order_default_value));
+
+        //if we are loading from favourites, grab directly from database
+        if(mSharedPreferences.equals(getContext().getString(R.string.favourites_sort_value)))
+        {
+            //load movies from database
+        }
+        else
+        {
+            //else initiate database load
+            new FetchMoviesTask(getContext(), adapter).execute();
+        }
     }
 
 }

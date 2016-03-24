@@ -4,9 +4,12 @@ import android.content.ContentProviderOperation;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
@@ -47,6 +50,7 @@ public class MovieDetailFragment extends Fragment {
     private LinearLayout mTrailerContainer;
     private LinearLayout mReviewContainer;
     private Button mFavouriteButton;
+    private Boolean mIsFavourite;
 
     //for sharing intent
     private ShareActionProvider mShareActionProvider;
@@ -60,6 +64,21 @@ public class MovieDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        //see if movie is a favourite
+        //TODO: query here to see if movie exists in favourites then set boolean accordingly
+        //https://github.com/SimonVT/schematic/blob/master/schematic-samples/src/main/java/net/simonvt/schematic/sample/ui/fragment/ListFragment.java
+        //getLoaderManager().initLoader(LOADER_NOTES, null, this);
+
+        //getActivity().getContentResolver().query(FavouriteMovieProvider.Movies.CONTENT_URI, valuesForInsert);
+        /*Loader<Cursor> loader =  new CursorLoader(
+                getActivity(),
+                mUri,
+                DETAIL_COLUMNS,
+                null,
+                null,
+                null
+        );*/
     }
 
     @Override
@@ -180,13 +199,13 @@ public class MovieDetailFragment extends Fragment {
 
     /* used to add movie to favourites via content provider */
     public void insertData(){
-        Log.d("Favourites", "insert");
+
+        //does this movie already exist as a favourite?
 
         //Insert movie to database
         //TODO: ONLY insert new favourites - query first to check
         ContentValues valuesForInsert = new ContentValues();
         valuesForInsert.put(FavouriteMovieColumns.API_ID, mMovie.getId());
-        valuesForInsert.put(FavouriteMovieColumns.LENGTH, mMovie.getLength());
         valuesForInsert.put(FavouriteMovieColumns.MOVIE_DESCRIPTION, mMovie.getMovieDescription());
         valuesForInsert.put(FavouriteMovieColumns.POSTER_PATH, mMovie.getPosterPath());
         valuesForInsert.put(FavouriteMovieColumns.RELEASE_DATE, mMovie.getReleaseDate());

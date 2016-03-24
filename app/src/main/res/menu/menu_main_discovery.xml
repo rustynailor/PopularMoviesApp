@@ -19,4 +19,10 @@
         app:showAsAction="never"
         android:title="Highest Rated First"
         app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
+
+    <item
+        android:id="@+id/sort_favourites"
+        app:showAsAction="never"
+        android:title="Favourites"
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
 </menu>

@@ -37,6 +37,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="uk.co.rustynailor.android.popularmovies.MainDiscovery" />
         </activity>
+        <provider
+            android:authorities="uk.co.rustynailor.android.popularmovies.data.FavouriteMovieProvider"
+            android:name=".data.generated.FavouriteMovieProvider"
+            android:enabled="true"
+            android:exported="false"/>
     </application>
 
 </manifest>

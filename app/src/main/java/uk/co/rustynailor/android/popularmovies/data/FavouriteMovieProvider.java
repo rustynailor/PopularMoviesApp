@@ -1,10 +1,12 @@
 package uk.co.rustynailor.android.popularmovies.data;
 
+import android.content.ContentValues;
 import android.net.Uri;
 
 import net.simonvt.schematic.annotation.ContentProvider;
 import net.simonvt.schematic.annotation.ContentUri;
 import net.simonvt.schematic.annotation.InexactContentUri;
+import net.simonvt.schematic.annotation.NotifyInsert;
 import net.simonvt.schematic.annotation.TableEndpoint;
 
 /**
@@ -42,6 +44,13 @@ public final class  FavouriteMovieProvider {
                 pathSegment = 1)
         public static Uri withId(long id){
             return buildUri(Path.MOVIES, String.valueOf(id));
+        }
+
+        @NotifyInsert(paths = Path.MOVIES) public static Uri[] onInsert(ContentValues values) {
+            final long movieId = values.getAsLong(FavouriteMovieColumns.API_ID);
+            return new Uri[] {
+                    Movies.withId(movieId)
+            };
         }
     }
 

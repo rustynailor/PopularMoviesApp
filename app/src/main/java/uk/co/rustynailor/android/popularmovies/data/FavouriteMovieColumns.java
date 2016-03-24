@@ -39,10 +39,6 @@ public interface FavouriteMovieColumns {
     @DataType(DataType.Type.TEXT) @NotNull
     public static final String MOVIE_DESCRIPTION = "movie_description";
 
-    //length - mLength
-    @DataType(DataType.Type.TEXT) @NotNull
-    public static final String LENGTH = "length";
-
 
 
 }
