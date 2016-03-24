@@ -7,15 +7,20 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.CursorAdapter;
 
 import java.util.ArrayList;
 
 import uk.co.rustynailor.android.popularmovies.adapters.MovieGridviewAdapter;
 import uk.co.rustynailor.android.popularmovies.models.Movie;
+import uk.co.rustynailor.android.popularmovies.network.FetchMoviesFromDatabase;
 import uk.co.rustynailor.android.popularmovies.network.FetchMoviesTask;
 
 
@@ -161,15 +166,23 @@ public class MainDiscoveryFragment extends Fragment {
         mEndlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(mInitialMovieCount, mLayoutManager) {
             @Override
             public void onLoadMore() {
-                // load next page of movies
-                mPageCount++;
-                updateMovies();
+                // load next page of movies - only if this isn't favourites (as favourites is loaded in one hit)
+                if(!mMovieSortOrder.equals(getContext().getString(R.string.favourites_sort_value))){
+                    mPageCount++;
+                    updateMovies();
+                }
             }
         };
 
         mRecyclerview.addOnScrollListener(mEndlessRecyclerOnScrollListener);
-        mRecyclerview.scrollToPosition(mSavedListPosition);
 
+        //initial movie load if we aren't restoring from bundle
+        if(mInitialMovies == null){
+            updateMovies();
+        } else {
+            //as we are restoring from bundle, scroll to last position
+            mRecyclerview.scrollToPosition(mSavedListPosition);
+        }
     }
 
     /** reset adapter and reset page counter to 1 */
@@ -188,9 +201,10 @@ public class MainDiscoveryFragment extends Fragment {
                 getContext().getString(R.string.pref_movie_sort_order_default_value));
 
         //if we are loading from favourites, grab directly from database
-        if(mSharedPreferences.equals(getContext().getString(R.string.favourites_sort_value)))
+        if(mMovieSortOrder.equals(getContext().getString(R.string.favourites_sort_value)))
         {
             //load movies from database
+            getLoaderManager().initLoader(FetchMoviesFromDatabase.CURSOR_LOADER_ID, null, new FetchMoviesFromDatabase(getContext(), adapter));
         }
         else
         {

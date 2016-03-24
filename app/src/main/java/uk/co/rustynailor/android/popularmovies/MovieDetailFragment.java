@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
@@ -39,7 +40,7 @@ import uk.co.rustynailor.android.popularmovies.network.FetchTrailersTask;
 /**
  * A fragment containing a singel movie view
  */
-public class MovieDetailFragment extends Fragment {
+public class MovieDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> { 
     private Movie mMovie;
     private TextView mMovieTitle;
     private TextView mYearOfRelease;
@@ -66,19 +67,11 @@ public class MovieDetailFragment extends Fragment {
         setHasOptionsMenu(true);
 
         //see if movie is a favourite
-        //TODO: query here to see if movie exists in favourites then set boolean accordingly
-        //https://github.com/SimonVT/schematic/blob/master/schematic-samples/src/main/java/net/simonvt/schematic/sample/ui/fragment/ListFragment.java
-        //getLoaderManager().initLoader(LOADER_NOTES, null, this);
-
-        //getActivity().getContentResolver().query(FavouriteMovieProvider.Movies.CONTENT_URI, valuesForInsert);
-        /*Loader<Cursor> loader =  new CursorLoader(
-                getActivity(),
-                mUri,
-                DETAIL_COLUMNS,
+        CursorLoader favouriteCheck = new CursorLoader(getContext(), FavouriteMovieProvider.Movies.CONTENT_URI,
                 null,
                 null,
-                null
-        );*/
+                null,
+                null);
     }
 
     @Override
@@ -213,6 +206,21 @@ public class MovieDetailFragment extends Fragment {
         valuesForInsert.put(FavouriteMovieColumns.VOTE_AVERAGE, mMovie.getVoteAverage());
 
         Uri returnUri =  getActivity().getContentResolver().insert(FavouriteMovieProvider.Movies.CONTENT_URI, valuesForInsert);
+
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
 
     }
 }

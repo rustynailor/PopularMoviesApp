@@ -47,7 +47,10 @@ public class MainDiscovery extends AppCompatActivity {
              updateMovieSortOrder(getString(R.string.highest_rated_sort_value));
         } else if (id == R.id.sort_most_popular) {
              updateMovieSortOrder(getString(R.string.most_popular_sort_value));
+        } else if (id == R.id.sort_favourites) {
+            updateMovieSortOrder(getString(R.string.favourites_sort_value));
         }
+
 
         return super.onOptionsItemSelected(item);
     }

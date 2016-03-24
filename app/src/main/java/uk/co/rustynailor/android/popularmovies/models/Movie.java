@@ -16,7 +16,7 @@ public class Movie implements Parcelable{
     private String mVoteAverage;
     private String mMovieDescription;
     private String mLength;
-    private Boolean mIsFavourite;
+    private Boolean mIsFavourite = false; //default value for favourite movie
 
     //constructors added for parcelable
     public Movie(){
