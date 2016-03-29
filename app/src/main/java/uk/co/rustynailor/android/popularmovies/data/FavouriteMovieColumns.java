@@ -13,31 +13,31 @@ public interface FavouriteMovieColumns {
     //primary key auto increment integer
     @DataType(DataType.Type.INTEGER) @PrimaryKey
     @AutoIncrement
-    public static final String _ID = "_id";
+    String _ID = "_id";
 
     //api_id - mId in model
     @DataType(DataType.Type.INTEGER) @NotNull
-    public static final String API_ID = "api_id";
+    String API_ID = "api_id";
 
     //title - mTitle
     @DataType(DataType.Type.TEXT) @NotNull
-    public static final String TITLE = "title";
+    String TITLE = "title";
 
     //poster_path - mPosterPath
     @DataType(DataType.Type.TEXT) @NotNull
-    public static final String POSTER_PATH = "poster_path";
+    String POSTER_PATH = "poster_path";
 
     //release_date - mReleaseDate
     @DataType(DataType.Type.TEXT) @NotNull
-    public static final String RELEASE_DATE = "release_date";
+    String RELEASE_DATE = "release_date";
 
     //vote_average - mVoteAverage
     @DataType(DataType.Type.TEXT) @NotNull
-    public static final String VOTE_AVERAGE = "vote_average";
+    String VOTE_AVERAGE = "vote_average";
 
     //movie_description - mMovieDescription
     @DataType(DataType.Type.TEXT) @NotNull
-    public static final String MOVIE_DESCRIPTION = "movie_description";
+    String MOVIE_DESCRIPTION = "movie_description";
 
 
 

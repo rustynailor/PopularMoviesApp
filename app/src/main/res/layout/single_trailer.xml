@@ -17,7 +17,8 @@
             android:layout_height="40dp"
             android:layout_marginLeft="40dp"
             android:id="@+id/playButton"
-            android:src="@drawable/triangle"/>
+            android:src="@drawable/triangle"
+            android:contentDescription="@string/play_trailer"/>
 
         <TextView
             android:layout_width="wrap_content"

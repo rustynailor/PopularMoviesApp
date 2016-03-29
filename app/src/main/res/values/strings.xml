@@ -34,4 +34,13 @@
     <string name="remove_favourite_text">Remove From Favourites</string>
     <string name="add_favourite_text">Add To Favourites</string>
     <string name="no_saved_favourites">You have no favourites saved - add some and they will appear in this list.</string>
+    <string name="movie_summary">Movie Title - summary - etc</string>
+    <string name="most_popular_first">Most Popular First</string>
+    <string name="highest_rated_first">Highest Rated First</string>
+    <string name="favourites_only">Favourites</string>
+    <string name="mark_as_favourite">Mark as Favourite</string>
+    <string name="trailers">Trailers:</string>
+    <string name="reviews">Reviews:</string>
+    <string name="play_trailer">Play Trailer</string>
+    <string name="movie_poster_label">Movie poster</string>
 </resources>

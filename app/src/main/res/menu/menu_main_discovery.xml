@@ -11,15 +11,15 @@
     <item
         android:id="@+id/sort_most_popular"
         app:showAsAction="never"
-        android:title="Most Popular First"/>
+        android:title="@string/most_popular_first"/>
 
     <item
         android:id="@+id/sort_highest_rated"
         app:showAsAction="never"
-        android:title="Highest Rated First"/>
+        android:title="@string/highest_rated_first"/>
 
     <item
         android:id="@+id/sort_favourites"
         app:showAsAction="never"
-        android:title="Favourites"/>
+        android:title="@string/favourites_only"/>
 </menu>

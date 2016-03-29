@@ -9,32 +9,29 @@
     tools:context="uk.co.rustynailor.android.popularmovies.MainDiscoveryFragment"
     tools:showIn="@layout/activity_main_discovery">
 
-    <FrameLayout
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:text="@string/no_saved_favourites"
+        android:layout_margin="15dp"
+        android:id="@+id/no_favourites_message"
+        android:gravity="center_vertical|center_horizontal"
+        android:visibility="gone"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/no_saved_favourites"
-            android:layout_margin="15dp"
-            android:id="@+id/no_favourites_message"
-            android:gravity="center_vertical|center_horizontal"
-            android:visibility="gone"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview_movies"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:numColumns="2"
-            android:verticalSpacing="0dp"
-            android:horizontalSpacing="0dp"
-            android:stretchMode="columnWidth"
-            android:gravity="center"
-            />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_movies"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="2"
+        android:verticalSpacing="0dp"
+        android:horizontalSpacing="0dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        />
 
 
-    </FrameLayout>
+
 
 
 </RelativeLayout>

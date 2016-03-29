@@ -7,7 +7,8 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     tools:context="uk.co.rustynailor.android.popularmovies.MovieDetailFragment"
-    tools:showIn="@layout/activity_movie_detail">
+    tools:showIn="@layout/activity_movie_detail"
+    android:baselineAligned="false">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +23,6 @@
         android:paddingLeft="20dp"
         android:textSize="40sp"
         android:textColor="@color/colorAccent"
-        android:password="false"
         android:gravity="center_vertical"
         android:elevation="2dp"
         android:layout_weight="0.75"
@@ -43,7 +43,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/poster"
                 android:cropToPadding="false"
-                android:paddingTop="10dp" />
+                android:paddingTop="10dp"
+                android:contentDescription="@string/movie_poster_label"/>
         </FrameLayout>
 
         <LinearLayout
@@ -71,7 +72,7 @@
             <Button
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
-                android:text="Mark as Favourite"
+                android:text="@string/mark_as_favourite"
                 android:id="@+id/favourite_button"
                 android:textSize="10sp"
                 android:layout_marginLeft="10dp"
@@ -113,7 +114,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Trailers:"
+                android:text="@string/trailers"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
@@ -131,7 +132,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reviews:"
+                android:text="@string/reviews"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
