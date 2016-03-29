@@ -31,4 +31,5 @@
     <string name="trailer_error_message">Unable to retrieve trailers from the Movie DB server - please make sure you have an internet connection and try again.</string>
     <string name="review_error_message">Unable to retrieve trailers from the Movie DB server - please make sure you have an internet connection and try again.</string>
     <string name="action_share">Share</string>
+    <string name="remove_favourite_text">Remove From Favourites</string>
 </resources>

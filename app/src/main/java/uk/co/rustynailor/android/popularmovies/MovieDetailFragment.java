@@ -57,6 +57,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private ShareActionProvider mShareActionProvider;
     private MenuItem mSharingButton;
 
+    public static final int FAVOURITE_CHECK_LOADER_ID = 0;
 
     public MovieDetailFragment() {
     }
@@ -66,12 +67,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        //see if movie is a favourite
-        CursorLoader favouriteCheck = new CursorLoader(getContext(), FavouriteMovieProvider.Movies.CONTENT_URI,
-                null,
-                null,
-                null,
-                null);
+
     }
 
     @Override
@@ -127,14 +123,11 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         mSynopsis = (TextView) view.findViewById(R.id.synopsis);
         mSynopsis.setText(mMovie.getMovieDescription());
 
-        //attach listener to favourite button
+        //favourite button - assign to variable and start loader
         mFavouriteButton = (Button)view.findViewById(R.id.favourite_button);
-        mFavouriteButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                insertData();
-            }
-        });
+        //we do this here so there is a reference available to mFavouriteButton
+        getLoaderManager().initLoader(FAVOURITE_CHECK_LOADER_ID, null, this);
+
         mPoster = (ImageView) view.findViewById(R.id.poster);
 
         //Build URL to download image
@@ -196,7 +189,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         //does this movie already exist as a favourite?
 
         //Insert movie to database
-        //TODO: ONLY insert new favourites - query first to check
         ContentValues valuesForInsert = new ContentValues();
         valuesForInsert.put(FavouriteMovieColumns.API_ID, mMovie.getId());
         valuesForInsert.put(FavouriteMovieColumns.MOVIE_DESCRIPTION, mMovie.getMovieDescription());
@@ -210,17 +202,46 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
+    public Loader<Cursor> onCreateLoader(int id, Bundle args)
+    {
+        //build appropriate URI
+        Uri movieUri = FavouriteMovieProvider.Movies.CONTENT_URI.buildUpon().appendPath(mMovie.getId()).build();
+
+        CursorLoader favouriteCheck = new CursorLoader(
+                getContext(),
+                movieUri,
+                null,
+                null,
+                null,
+                null);
+
+        return favouriteCheck;
     }
 
+    /* this is called both on initial load, and when a favourite is inserted or removed */
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        if(data != null && data.moveToFirst()){
+            //movie is already a favourite - change button text and display
+            mFavouriteButton.setText(R.string.remove_favourite_text);
+        } else {
+            //movie is not a favourite - add listener to add to favourites
+            mFavouriteButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Perform action on click
+                    insertData();
+                }
+            });
+        }
+
+        //now make button visible
+        mFavouriteButton.setVisibility(View.VISIBLE);
 
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        //not required here
     }
 }

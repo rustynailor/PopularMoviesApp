@@ -77,7 +77,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/favouriteButton"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:visibility="gone"/>
 
 
         </LinearLayout>
