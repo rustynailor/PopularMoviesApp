@@ -33,4 +33,5 @@
     <string name="action_share">Share</string>
     <string name="remove_favourite_text">Remove From Favourites</string>
     <string name="add_favourite_text">Add To Favourites</string>
+    <string name="no_saved_favourites">You have no favourites saved - add some and they will appear in this list.</string>
 </resources>

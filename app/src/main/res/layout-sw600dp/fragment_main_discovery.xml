@@ -12,10 +12,23 @@
 
 
 
+<FrameLayout
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/no_saved_favourites"
+        android:layout_margin="15dp"
+        android:id="@+id/no_favourites_message"
+        android:gravity="center_vertical|center_horizontal"
+        android:visibility="gone"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_movies"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:numColumns="2"
         android:verticalSpacing="0dp"
@@ -23,6 +36,10 @@
         android:stretchMode="columnWidth"
         android:gravity="center"
         />
+
+
+</FrameLayout>
+
 
     <FrameLayout
         android:id="@+id/movie_detail_container"

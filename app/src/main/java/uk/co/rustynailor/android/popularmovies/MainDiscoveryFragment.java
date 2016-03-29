@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,8 @@ public class MainDiscoveryFragment extends Fragment {
     private View mRootView;
     //our custom adapter
     private MovieGridviewAdapter adapter;
+    //holder for "no favourites" message
+    private TextView mNoFavouritesMessage;
     //Gridview for poster layout
     private RecyclerView mRecyclerview;
     //page count for polling API with, updated in onScrollListener
@@ -142,6 +145,9 @@ public class MainDiscoveryFragment extends Fragment {
         };
 
 
+        //get reference to no saved favourites message
+        mNoFavouritesMessage = (TextView) mRootView.findViewById(R.id.no_favourites_message);
+
         if(mInitialMovies == null){
             adapter = new MovieGridviewAdapter(getActivity(), movieItemClickListener);
             mInitialMovieCount = mMoviesPerRequest;
@@ -174,6 +180,8 @@ public class MainDiscoveryFragment extends Fragment {
 
         mRecyclerview.addOnScrollListener(mEndlessRecyclerOnScrollListener);
 
+
+
         //initial movie load if we aren't restoring from bundle
         if(mInitialMovies == null){
             updateMovies();
@@ -191,7 +199,7 @@ public class MainDiscoveryFragment extends Fragment {
         if(mMovieSortOrder.equals(getContext().getString(R.string.favourites_sort_value)))
         {
             //load movies from database
-            getLoaderManager().restartLoader(FetchMoviesFromDatabase.CURSOR_LOADER_ID, null, new FetchMoviesFromDatabase(getActivity(), adapter));
+            getLoaderManager().restartLoader(FetchMoviesFromDatabase.CURSOR_LOADER_ID, null, new FetchMoviesFromDatabase(getActivity(), adapter, mNoFavouritesMessage));
         }
     }
 
@@ -215,12 +223,14 @@ public class MainDiscoveryFragment extends Fragment {
         if(mMovieSortOrder.equals(getContext().getString(R.string.favourites_sort_value)))
         {
             //load movies from database
-            getLoaderManager().initLoader(FetchMoviesFromDatabase.CURSOR_LOADER_ID, null, new FetchMoviesFromDatabase(getActivity(), adapter));
+            getLoaderManager().initLoader(FetchMoviesFromDatabase.CURSOR_LOADER_ID, null, new FetchMoviesFromDatabase(getActivity(), adapter, mNoFavouritesMessage));
         }
         else
         {
             //destroy database cursor loader if we are not in favourites view
             getLoaderManager().destroyLoader(FetchMoviesFromDatabase.CURSOR_LOADER_ID);
+            //make sure no favourites message is hidden
+            mNoFavouritesMessage.setVisibility(View.GONE);
             //else initiate database load
             new FetchMoviesTask(getContext(), adapter).execute();
         }

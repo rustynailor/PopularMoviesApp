@@ -7,6 +7,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,12 +28,14 @@ public class FetchMoviesFromDatabase implements LoaderManager.LoaderCallbacks<Cu
     private Context mContext;
     private MovieGridviewAdapter mAdapter;
     private static final String LOG_TAG = FetchMoviesFromDatabase.class.getSimpleName();
+    private TextView mNoFavouritesTextView;
 
     public static final int CURSOR_LOADER_ID = 0;
 
-    public FetchMoviesFromDatabase(Context mContext, MovieGridviewAdapter mAdapter) {
-        this.mContext = mContext;
-        this.mAdapter = mAdapter;
+    public FetchMoviesFromDatabase(Context context, MovieGridviewAdapter adapter, TextView noFavouritesTextView) {
+        mContext = context;
+        mAdapter = adapter;
+        mNoFavouritesTextView = noFavouritesTextView;
     }
 
     @Override
@@ -53,6 +57,8 @@ public class FetchMoviesFromDatabase implements LoaderManager.LoaderCallbacks<Cu
         if (data != null) {
             // move cursor to first row
             if (data.moveToFirst()) {
+                //hide  message informing user that they have no favourites
+                mNoFavouritesTextView.setVisibility(View.GONE);
                 do {
                     //create movie from cursor row and add to adapter
                     Movie movie = new Movie();
@@ -68,6 +74,9 @@ public class FetchMoviesFromDatabase implements LoaderManager.LoaderCallbacks<Cu
 
                     mAdapter.add(movie);
                 } while (data.moveToNext());
+            } else {
+                //empty cursor - show message informing user that they have no favourites
+                mNoFavouritesTextView.setVisibility(View.VISIBLE);
             }
             mAdapter.notifyDataSetChanged();
         }

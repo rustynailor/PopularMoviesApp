@@ -83,13 +83,16 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
         // Get the provider and hold onto it to set/change the share intent.
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(mSharingButton);
-        super.onCreateOptionsMenu(menu, inflater);
 
         //load trailers and reviews
         //we do this here so we can pass the share action provider to the fetch trailers task
         new FetchTrailersTask(getContext(), mMovie.getId(), mTrailerContainer, mShareActionProvider, mSharingButton).execute();
         new FetchReviewsTask(getContext(), mMovie.getId(), mReviewContainer).execute();
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -211,7 +214,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     /* add movie to favourites via content provider */
     public void insertMovieToFavourites(){
-        
+
         //Insert movie to database
         ContentValues valuesForInsert = new ContentValues();
         valuesForInsert.put(FavouriteMovieColumns.API_ID, mMovie.getId());
