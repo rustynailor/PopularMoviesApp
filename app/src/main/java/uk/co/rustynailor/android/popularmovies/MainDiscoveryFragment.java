@@ -96,6 +96,9 @@ public class MainDiscoveryFragment extends Fragment {
 
         //get shared preferences - used later to check sort order
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        //initial read of sort order
+        mMovieSortOrder = mSharedPreferences.getString(getContext().getString(R.string.pref_movie_sort_order_key),
+                getContext().getString(R.string.pref_movie_sort_order_default_value));
 
         return mRootView;
     }
