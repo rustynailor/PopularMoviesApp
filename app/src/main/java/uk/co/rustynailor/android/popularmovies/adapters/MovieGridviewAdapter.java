@@ -3,11 +3,14 @@ package uk.co.rustynailor.android.popularmovies.adapters;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -150,15 +153,43 @@ public class MovieGridviewAdapter extends RecyclerView.Adapter<MovieGridviewAdap
                 .appendPath(posterPath);
 
 
-        String url = builder.build().toString();
+        final String url = builder.build().toString();
 
+        //edited to use Picasso image cache first
+        //then attempt load - based on this answer:
+        //http://stackoverflow.com/questions/23978828/how-do-i-use-disk-caching-in-picasso
         Picasso.with(mContext)
                 .load(url)
                 .resize(mTargetWidth, mTargetHeight)
                 .centerCrop()
-                .into(holder.mImageView);
+                .into(holder.mImageView, new Callback() {
 
+                    @Override
+                    public void onSuccess() {
+                        //not required
+                    }
 
+                    @Override
+                    public void onError() {
+                        //Try again online if cache failed
+                    Picasso.with(mContext)
+                            .load(url)
+                            .resize(mTargetWidth, mTargetHeight)
+                            .centerCrop()
+                            .into(holder.mImageView, new Callback() {
+
+                            @Override
+                            public void onSuccess() {
+                                //not required
+                            }
+
+                            @Override
+                            public void onError() {
+                                Log.e("Picasso", "Could not fetch image from either cache or online");
+                            }
+                        });
+                    }
+                });
     }
 
 }

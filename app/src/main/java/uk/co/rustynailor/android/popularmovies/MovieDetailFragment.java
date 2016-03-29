@@ -25,6 +25,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -149,7 +151,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
                 .appendPath(posterPath);
 
 
-        String url = builder.build().toString();
+        final String url = builder.build().toString();
 
         int width= getActivity().getResources()
                 .getDisplayMetrics()
@@ -173,12 +175,38 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
         int targetHeight  =   (int) Math.round(targetWidth * posterRatio);
 
-
+        //edited to use Picasso image cache first
+        //then attempt load - based on this answer:
+        //http://stackoverflow.com/questions/23978828/how-do-i-use-disk-caching-in-picasso
         Picasso.with(getActivity())
                 .load(url)
                 .resize(targetWidth, targetHeight)
                 .centerInside()
-                .into(mPoster);
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(mPoster, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        //not required
+                    }
+
+                    @Override
+                    public void onError() {
+                        //Try again online if cache failed
+                        Picasso.with(getActivity())
+                                .load(url)
+                                .into(mPoster, new Callback() {
+                                    @Override
+                                    public void onSuccess() {
+                                        //not required
+                                    }
+
+                                    @Override
+                                    public void onError() {
+                                        Log.e("Picasso", "Could not fetch image from either cache or online");
+                                    }
+                                });
+                    }
+                });
 
         return view;
     }
