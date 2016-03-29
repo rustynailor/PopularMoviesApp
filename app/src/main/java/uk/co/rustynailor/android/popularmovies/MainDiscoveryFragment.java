@@ -183,6 +183,19 @@ public class MainDiscoveryFragment extends Fragment {
         }
     }
 
+    //** restart loader onResume if we are in favourites view - required to keep add / delete favourites functionality after device rotation **/
+    @Override
+    public void onResume() {
+        super.onResume();
+        //load movies from database
+        if(mMovieSortOrder.equals(getContext().getString(R.string.favourites_sort_value)))
+        {
+            //load movies from database
+            getLoaderManager().restartLoader(FetchMoviesFromDatabase.CURSOR_LOADER_ID, null, new FetchMoviesFromDatabase(getActivity(), adapter));
+        }
+    }
+
+
     /** reset adapter and reset page counter to 1 */
     public void clearList() {
         adapter.clear();
@@ -202,10 +215,12 @@ public class MainDiscoveryFragment extends Fragment {
         if(mMovieSortOrder.equals(getContext().getString(R.string.favourites_sort_value)))
         {
             //load movies from database
-            getLoaderManager().initLoader(FetchMoviesFromDatabase.CURSOR_LOADER_ID, null, new FetchMoviesFromDatabase(getContext(), adapter));
+            getLoaderManager().initLoader(FetchMoviesFromDatabase.CURSOR_LOADER_ID, null, new FetchMoviesFromDatabase(getActivity(), adapter));
         }
         else
         {
+            //destroy database cursor loader if we are not in favourites view
+            getLoaderManager().destroyLoader(FetchMoviesFromDatabase.CURSOR_LOADER_ID);
             //else initiate database load
             new FetchMoviesTask(getContext(), adapter).execute();
         }

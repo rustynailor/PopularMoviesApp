@@ -46,20 +46,18 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private Movie mMovie;
     private TextView mMovieTitle;
     private TextView mYearOfRelease;
-    private TextView mLength;
     private TextView mRating;
     private TextView mSynopsis;
     private ImageView mPoster;
     private LinearLayout mTrailerContainer;
     private LinearLayout mReviewContainer;
     private Button mFavouriteButton;
-    private Boolean mIsFavourite;
 
     //for sharing intent
     private ShareActionProvider mShareActionProvider;
     private MenuItem mSharingButton;
 
-    public static final int FAVOURITE_CHECK_LOADER_ID = 0;
+    public static final int FAVOURITE_CHECK_LOADER_ID = 1;
 
     public MovieDetailFragment() {
     }
@@ -211,11 +209,9 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         return view;
     }
 
-    /* used to add movie to favourites via content provider */
-    public void insertData(){
-
-        //does this movie already exist as a favourite?
-
+    /* add movie to favourites via content provider */
+    public void insertMovieToFavourites(){
+        
         //Insert movie to database
         ContentValues valuesForInsert = new ContentValues();
         valuesForInsert.put(FavouriteMovieColumns.API_ID, mMovie.getId());
@@ -225,7 +221,32 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         valuesForInsert.put(FavouriteMovieColumns.TITLE, mMovie.getTitle());
         valuesForInsert.put(FavouriteMovieColumns.VOTE_AVERAGE, mMovie.getVoteAverage());
 
-        Uri returnUri =  getActivity().getContentResolver().insert(FavouriteMovieProvider.Movies.CONTENT_URI, valuesForInsert);
+        getActivity().getContentResolver().insert(FavouriteMovieProvider.Movies.CONTENT_URI, valuesForInsert);
+
+    }
+
+    /* remove movie from favourites via content provider */
+    public void deleteMovieFromFavourites(){
+
+        //build appropriate URI
+        Uri movieUri = FavouriteMovieProvider.Movies.CONTENT_URI.buildUpon().appendPath(mMovie.getId()).build();
+
+        //Delete values //
+        String [] arguments = new String[1];
+        arguments[0] = mMovie.getId();
+        String selectionClause = FavouriteMovieColumns.API_ID + " = ?";
+
+        getContext().getContentResolver().delete(movieUri, selectionClause, arguments);
+
+        //after delete, update button function:
+        mFavouriteButton.setText(R.string.add_favourite_text);
+        mFavouriteButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                insertMovieToFavourites();
+            }
+        });
+
 
     }
 
@@ -253,12 +274,18 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         if(data != null && data.moveToFirst()){
             //movie is already a favourite - change button text and display
             mFavouriteButton.setText(R.string.remove_favourite_text);
+            mFavouriteButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Perform action on click
+                    deleteMovieFromFavourites();
+                }
+            });
         } else {
             //movie is not a favourite - add listener to add to favourites
             mFavouriteButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // Perform action on click
-                    insertData();
+                    insertMovieToFavourites();
                 }
             });
         }
